@@ -3,637 +3,911 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seminário de Filosofia: Tecnologia e Progresso (Edição Ultra)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:ital,wght@0,600;1,400&display=swap" rel="stylesheet">
+    <title>Relatório de Ocorrência de Avarias - PROMEC</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            50: '#f0f4f8',
+                            100: '#d9e2ec',
+                            500: '#334e68',
+                            800: '#102a43',
+                            900: '#0f172a',
+                        },
+                        royal: {
+                            500: '#2563eb',
+                            600: '#1d4ed8',
+                        },
+                        terracotta: {
+                            500: '#f97316',
+                            600: '#ea580c',
+                        },
+                        slate: {
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
     <style>
-        :root {
-            --bg-dark: #05070f;
-            --card-bg: rgba(18, 26, 43, 0.65);
-            --border-glow: rgba(56, 189, 248, 0.2);
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-cyan: #38bdf8;
-            --accent-gold: #fbbf24;
-            --accent-purple: #c084fc;
-            --accent-pink: #f472b6;
-            --accent-emerald: #34d399;
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: #0f172a;
+            color: #334155;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
+        h1, h2, h3, h4, .font-display {
             font-family: 'Outfit', sans-serif;
-            height: 100vh;
-            width: 100vw;
-            overflow: hidden;
+        }
+
+        /* Standard A4 Page Layout for Preview and Print */
+        .a4-page {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 20mm auto;
+            background: #ffffff;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border-radius: 4px;
+            position: relative;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            background-image: 
-                radial-gradient(circle at 15% 15%, rgba(56, 189, 248, 0.12) 0%, transparent 45%),
-                radial-gradient(circle at 85% 85%, rgba(192, 132, 252, 0.12) 0%, transparent 45%);
+            box-sizing: border-box;
+            page-break-after: always;
         }
 
-        /* Barra de Progresso no Topo */
-        .progress-bar-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.05);
-            z-index: 200;
+        @media print {
+            body {
+                background: none !important;
+                padding: 0 !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .a4-page {
+                margin: 0 !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                width: 100% !important;
+                min-height: 100vh !important;
+                padding: 15mm !important;
+                page-break-after: always !important;
+            }
         }
 
-        .progress-bar {
-            height: 100%;
-            width: 10%;
-            background: linear-gradient(90deg, var(--accent-cyan), var(--accent-purple), var(--accent-pink));
-            box-shadow: 0 0 12px var(--accent-cyan);
-            transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        /* Custom Scrollbar for App Sidebars */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #f97316; }
+
+        .editorial-accent {
+            background: linear-gradient(135deg, #2563eb 0%, #0f172a 100%);
         }
-
-        header {
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(10, 15, 29, 0.7);
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-            z-index: 100;
-        }
-
-        .brand-title {
-            font-size: 1.1rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            color: var(--accent-cyan);
-            font-weight: 800;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .brand-title::before {
-            content: '';
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            background: var(--accent-cyan);
-            border-radius: 50%;
-            box-shadow: 0 0 12px var(--accent-cyan);
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.4; transform: scale(0.8); }
-        }
-
-        .slide-counter-badge {
-            font-size: 1.1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: 6px 20px;
-            border-radius: 30px;
-            color: var(--text-main);
-            font-weight: 600;
-            backdrop-filter: blur(8px);
-        }
-
-        main {
-            flex-grow: 1;
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 30px 50px;
-        }
-
-        .slide {
-            position: absolute;
-            width: 100%;
-            max-width: 1400px;
-            height: 100%;
-            max-height: 700px;
-            display: grid;
-            grid-template-columns: 1.1fr 1fr;
-            gap: 50px;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transform: scale(0.96) translateY(20px);
-            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .slide.active {
-            opacity: 1;
-            visibility: visible;
-            transform: scale(1) translateY(0);
-        }
-
-        .content-block {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            gap: 22px;
-        }
-
-        /* Animação Staggered para elementos dentro do slide */
-        .slide.active .content-block > * {
-            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-            opacity: 0;
-        }
-
-        .slide.active .content-block > *:nth-child(1) { animation-delay: 0.1s; }
-        .slide.active .content-block > *:nth-child(2) { animation-delay: 0.25s; }
-        .slide.active .content-block > *:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        h1.title-large {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.8rem;
-            line-height: 1.15;
-            background: linear-gradient(135deg, #ffffff 30%, var(--accent-cyan) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-
-        h2.slide-title {
-            font-size: 2.3rem;
-            color: var(--accent-gold);
-            font-family: 'Playfair Display', serif;
-            letter-spacing: -0.5px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .concept-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 24px 28px;
-            border-radius: 20px;
-            backdrop-filter: blur(20px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .concept-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 100%);
-            pointer-events: none;
-        }
-
-        .concept-card:hover {
-            transform: translateY(-4px) translateX(6px);
-            border-color: var(--accent-cyan);
-            box-shadow: 0 20px 40px rgba(56, 189, 248, 0.15);
-        }
-
-        .concept-card h3 {
-            font-size: 1.35rem;
-            color: var(--accent-cyan);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .concept-card p {
-            font-size: 1.25rem;
-            line-height: 1.6;
-            color: var(--text-main);
-        }
-
-        .philosopher-highlight {
-            border-left: 4px solid var(--accent-purple);
-            background: rgba(192, 132, 252, 0.06);
-        }
-
-        .philosopher-name {
-            background: linear-gradient(135deg, #c084fc, #f472b6);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 800;
-        }
-
-        .quote-style {
-            border-left: 4px solid var(--accent-gold);
-            background: rgba(251, 191, 36, 0.06);
-            font-style: italic;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .image-block {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            min-height: 420px;
-            border-radius: 28px;
-            overflow: hidden;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-        }
-
-        .image-block img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            filter: brightness(0.85) contrast(1.1);
-            transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-
-        .slide.active .image-block img {
-            transform: scale(1.05);
-        }
-
-        .image-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 30px;
-            background: linear-gradient(to top, rgba(5, 7, 15, 0.95) 0%, rgba(5, 7, 15, 0.4) 70%, transparent 100%);
-            color: var(--text-muted);
-            font-size: 1.05rem;
-            letter-spacing: 0.5px;
-            backdrop-filter: blur(4px);
-        }
-
-        footer {
-            padding: 20px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: rgba(10, 15, 29, 0.7);
-            backdrop-filter: blur(16px);
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            z-index: 100;
-        }
-
-        .nav-controls {
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn {
-            background: rgba(56, 189, 248, 0.1);
-            color: var(--accent-cyan);
-            border: 1px solid var(--accent-cyan);
-            padding: 12px 28px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn:hover {
-            background: var(--accent-cyan);
-            color: var(--bg-dark);
-            box-shadow: 0 0 25px rgba(56, 189, 248, 0.5);
-            transform: translateY(-2px);
-        }
-
-        .btn:disabled {
-            opacity: 0.25;
-            cursor: not-allowed;
-            border-color: var(--text-muted);
-            color: var(--text-muted);
-            background: transparent;
-            box-shadow: none;
-            transform: none;
-        }
-
-        .keyboard-hint {
-            color: var(--text-muted);
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .key-badge {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 4px 12px;
-            border-radius: 8px;
-            font-size: 0.85rem;
-            color: var(--text-main);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-        }
-
-        .fullscreen-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            color: var(--text-main);
-            padding: 8px 18px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s;
-        }
-
-        .fullscreen-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: var(--text-main);
+        
+        .terracotta-accent {
+            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
         }
     </style>
 </head>
-<body>
+<body class="bg-slate-900 text-slate-800 min-h-screen flex flex-col md:flex-row antialiased">
 
-    <!-- Barra de Progresso Superior -->
-    <div class="progress-bar-container">
-        <div class="progress-bar" id="progressBar"></div>
-    </div>
-
-    <header>
-        <div class="brand-title">Seminário de Filosofia • TV Presentation</div>
-        <button class="fullscreen-btn" onclick="toggleFullScreen()">🖥️ Modo Tela Cheia TV</button>
-        <div class="slide-counter-badge" id="slideCounter">Slide 1 de 10</div>
-    </header>
-
-    <main>
-
-        <!-- SLIDE 1: Capa -->
-        <div class="slide active">
-            <div class="content-block">
-                <h1 class="title-large">Tecnologia e as Consequências do Progresso</h1>
-                <p style="font-size: 1.5rem; color: var(--text-muted);">Uma reflexão filosófica completa sobre quem nos tornamos na era da técnica acelerada.</p>
-                <div class="concept-card quote-style">
-                    <p>"A pergunta central não é o que a tecnologia faz por nós, mas o que ela está fazendo de nós."</p>
+    <!-- Navigation / Floating Controls Bar -->
+    <aside class="w-full md:w-80 bg-slate-900 border-r border-slate-800 text-slate-300 flex-shrink-0 flex flex-col justify-between h-screen sticky top-0 no-print z-50">
+        <div class="p-6">
+            <!-- Brand Badge -->
+            <div class="flex items-center space-x-3 mb-8 pb-6 border-b border-slate-800">
+                <div class="bg-gradient-to-tr from-amber-500 to-terracotta-500 w-10 h-10 rounded-xl flex items-center justify-center text-slate-950 font-black text-xl shadow-lg">
+                    P
+                </div>
+                <div>
+                    <h1 class="font-display font-bold text-white text-lg leading-tight tracking-wide">PROMEC</h1>
+                    <p class="text-xs text-slate-400 font-medium">Relatório Técnico Canva Premium</p>
                 </div>
             </div>
-            <div class="image-block">
-                <img src="https://images.unsplash.com/photo-1507146426996-ef05306b995a?auto=format&fit=crop&w=1200&q=80" alt="Conexão entre Humano e Tecnologia">
-                <div class="image-overlay">Ilustração: A convergência da consciência humana e redes de dados.</div>
-            </div>
+
+            <div class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3 px-2">Estrutura do Documento</div>
+            
+            <!-- Dynamic Navigation Links -->
+            <nav class="space-y-1.5 overflow-y-auto max-h-[calc(100vh-260px)] pr-2">
+                <a href="#p1" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg bg-slate-800 text-amber-400 font-semibold transition">
+                    <span class="w-6 font-mono text-slate-500">01</span> Capa Editorial
+                </a>
+                <a href="#p2" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
+                    <span class="w-6 font-mono text-slate-500">02</span> Introdução & Importância
+                </a>
+                <a href="#p3" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
+                    <span class="w-6 font-mono text-slate-500">03</span> Conceituação Técnica
+                </a>
+                <a href="#p4" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
+                    <span class="w-6 font-mono text-slate-500">04</span> Análise de Causas Raiz
+                </a>
+                <a href="#p5" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
+                    <span class="w-6 font-mono text-slate-500">05</span> Identificação & Triagem
+                </a>
+                <a href="#p6" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
+                    <span class="w-6 font-mono text-slate-500">06</span> Ficha de Ocorrência
+                </a>
+                <a href="#p7" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
+                    <span class="w-6 font-mono text-slate-500">07</span> Procedimentos de Contenção
+                </a>
+                <a href="#p8" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
+                    <span class="w-6 font-mono text-slate-500">08</span> Gestão Preventiva & 5S
+                </a>
+                <a href="#p9" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
+                    <span class="w-6 font-mono text-slate-500">09</span> Plano de Ação 5W2H
+                </a>
+                <a href="#p10" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
+                    <span class="w-6 font-mono text-slate-500">10</span> Conclusão & Fontes
+                </a>
+            </nav>
         </div>
 
-        <!-- SLIDE 2: O que é Tecnologia? -->
-        <div class="slide">
-            <div class="content-block">
-                <h2 class="slide-title">1. O que é a Tecnologia?</h2>
-                <div class="concept-card">
-                    <h3>⚙️ Conceito Amplo</h3>
-                    <p>Tecnologia não é apenas o mundo digital: a escrita, o fogo e a roda alteraram fundamentalmente a evolução humana.</p>
-                </div>
-                <div class="concept-card philosopher-highlight">
-                    <h3>💡 <span class="philosopher-name">Martin Heidegger</span></h3>
-                    <p>A técnica moderna não é neutra. Ela faz com que a humanidade enxergue a natureza e a si própria apenas como <em>reserva de recursos</em> a explorar e otimizar.</p>
-                </div>
-            </div>
-            <div class="image-block">
-                <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80" alt="Engrenagens e Circuitos">
-                <div class="image-overlay">Heidegger: A técnica transforma o planeta num grande estoque de recursos.</div>
-            </div>
+        <!-- Sidebar Actions -->
+        <div class="p-6 border-t border-slate-800 space-y-3">
+            <button onclick="window.print()" class="w-full bg-gradient-to-r from-royal-500 to-royal-600 hover:from-royal-600 hover:to-blue-700 text-white py-3 px-4 rounded-xl font-bold text-xs shadow-lg flex items-center justify-center space-x-2 transition">
+                <i class="fa-solid fa-print"></i>
+                <span>Exportar PDF / Imprimir A4</span>
+            </button>
         </div>
+    </aside>
 
-        <!-- SLIDE 3: O Mito do Progresso -->
-        <div class="slide">
-            <div class="content-block">
-                <h2 class="slide-title">2. A Ilusão do Progresso Linear</h2>
-                <div class="concept-card">
-                    <h3>🏛️ Promessa Iluminista (Séc. XVIII)</h3>
-                    <p>Acreditava-se que o avanço tecnológico traria automaticamente o progresso moral, a paz e a liberdade universal.</p>
-                </div>
-                <div class="concept-card philosopher-highlight">
-                    <h3>💣 <span class="philosopher-name">Escola de Frankfurt</span></h3>
-                    <p>Adorno e Horkheimer provam que, no século XX, a tecnologia foi usada para a destruição industrial em massa e regimes autoritários.</p>
-                </div>
-            </div>
-            <div class="image-block">
-                <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1200&q=80" alt="Cidade Futurista e Sombras">
-                <div class="image-overlay">Razão Instrumental: Quando a tecnologia domina a natureza e escraviza o homem.</div>
-            </div>
-        </div>
+    <!-- Document Container -->
+    <main class="flex-1 overflow-y-auto bg-slate-950 p-4 md:p-8 flex flex-col items-center">
 
-        <!-- SLIDE 4: Subjetividade e Redes -->
-        <div class="slide">
-            <div class="content-block">
-                <h2 class="slide-title">3. Subjetividade & Relações Humanas</h2>
-                <div class="concept-card philosopher-highlight">
-                    <h3>📱 <span class="philosopher-name">Byung-Chul Han</span></h3>
-                    <p>Na <em>Sociedade do Cansaço</em>, a hiperconectividade gera autoexploração contínua, ansiedade, burnout e esvaziamento da empatia.</p>
+        <!-- ==================== PÁGINA 1: CAPA EDITORIAL ==================== -->
+        <article id="p1" class="a4-page relative overflow-hidden justify-between border-t-8 border-terracotta-500">
+            <!-- Header Banner -->
+            <div class="flex items-center justify-between border-b border-slate-200 pb-6">
+                <div>
+                    <span class="text-xs font-black tracking-widest text-terracotta-500 uppercase">Documento Técnico Exclusivo</span>
+                    <h2 class="text-2xl font-black text-slate-900 tracking-tight font-display">PROMEC</h2>
                 </div>
-                <div class="concept-card philosopher-highlight">
-                    <h3>🌊 <span class="philosopher-name">Zygmunt Bauman</span></h3>
-                    <p>Na <em>Modernidade Líquida</em>, os laços humanos reais são substituídos por conexões frágeis e descartáveis através das telas.</p>
+                <div class="text-right">
+                    <span class="text-xs font-semibold text-slate-400 block uppercase">Código de Controle</span>
+                    <span class="text-xs font-mono font-bold bg-slate-100 text-slate-800 px-3 py-1 rounded-full border border-slate-200">REL-AVAR-2026/SRD</span>
                 </div>
             </div>
-            <div class="image-block">
-                <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80" alt="Pessoa no celular em ambiente escuro">
-                <div class="image-overlay">A era da hiperconexão: Isolamento social no meio da multidão digital.</div>
-            </div>
-        </div>
 
-        <!-- SLIDE 5: Panóptico Digital -->
-        <div class="slide">
-            <div class="content-block">
-                <h2 class="slide-title">4. Vigiados e Punidos: O Panóptico Digital</h2>
-                <div class="concept-card philosopher-highlight">
-                    <h3>👁️ <span class="philosopher-name">Michel Foucault & A Vigilância</span></h3>
-                    <p>Foucault descreveu o <em>Panóptico</em>: uma estrutura de vigilância invisível onde os indivíduos se comportam porque sabem que podem estar a ser observados a qualquer momento.</p>
+            <!-- Hero Section with Images Grid -->
+            <div class="my-8 space-y-6">
+                <div class="space-y-3">
+                    <span class="bg-blue-50 text-royal-600 text-xs font-bold px-3 py-1.5 rounded-md uppercase tracking-wider border border-blue-100 inline-block">
+                        Assistência Administrativa & Logística
+                    </span>
+                    <h1 class="text-4xl font-extrabold text-slate-900 leading-tight font-display tracking-tight">
+                        Relatório de Ocorrência de Avarias
+                    </h1>
+                    <p class="text-lg text-slate-600 font-medium">
+                        Diretrizes de Controle de Materiais, Prevenção de Perdas e Gestão de Qualidade em Armazenagem.
+                    </p>
                 </div>
-                <div class="concept-card">
-                    <h3>📡 A Sociedade do Controlo Digital</h3>
-                    <p>Hoje não precisamos de guardas físicos: nós fornecemos voluntariamente os nossos dados, localização, hábitos e rostos 24h por dia às Big Techs e governos.</p>
-                </div>
-            </div>
-            <div class="image-block">
-                <img src="https://images.unsplash.com/photo-1557597774-9d273605dfa9?auto=format&fit=crop&w=1200&q=80" alt="Câmaras de vigilância digitais">
-                <div class="image-overlay">Foucault na era dos dados: O Panóptico transformado em redes e algoritmos.</div>
-            </div>
-        </div>
 
-        <!-- SLIDE 6: Tecnoestética e Arte -->
-        <div class="slide">
-            <div class="content-block">
-                <h2 class="slide-title">5. Arte, IA & A Perda da "Aura"</h2>
-                <div class="concept-card philosopher-highlight">
-                    <h3>🎨 <span class="philosopher-name">Walter Benjamin</span></h3>
-                    <p>No ensaio <em>A obra de arte na era da sua reprodutibilidade técnica</em>, Benjamin alerta que a replicação infinita destrói a "aura" (o valor único e autêntico) da arte.</p>
-                </div>
-                <div class="concept-card">
-                    <h3>🤖 Cópia vs. Autenticidade Humana</h3>
-                    <p>Com a IA a gerar arte, textos e músicas instantâneas, surge a questão: a tecnologia enriquece a cultura ou reduz a criatividade humana a meros padrões matemáticos?</p>
+                <!-- Editorial Composite Grid Images -->
+                <div class="grid grid-cols-12 gap-3 h-64 my-6">
+                    <div class="col-span-8 rounded-2xl overflow-hidden relative shadow-md">
+                        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80" alt="Warehouse Operations" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent flex items-end p-4">
+                            <span class="text-white text-xs font-medium">Centro de Distribuição & Logística de Suprimentos</span>
+                        </div>
+                    </div>
+                    <div class="col-span-4 grid grid-rows-2 gap-3">
+                        <div class="rounded-xl overflow-hidden shadow-sm relative">
+                            <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=600&q=80" alt="Inventory Inspection" class="w-full h-full object-cover">
+                        </div>
+                        <div class="rounded-xl overflow-hidden shadow-sm relative">
+                            <img src="https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&w=600&q=80" alt="Packaging Control" class="w-full h-full object-cover">
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="image-block">
-                <img src="https://images.unsplash.com/photo-1547891654-e66ed7ebb968?auto=format&fit=crop&w=1200&q=80" alt="Arte abstrata e circuitos digitais">
-                <div class="image-overlay">Walter Benjamin: A criação humana diante do algoritmo gerador de cópias.</div>
-            </div>
-        </div>
 
-        <!-- SLIDE 7: Viés Algorítmico -->
-        <div class="slide">
-            <div class="content-block">
-                <h2 class="slide-title">6. Os Mitos da Neutralidade: Viés Algorítmico</h2>
-                <div class="concept-card">
-                    <h3>⚖️ A Ilusão da Neutralidade</h3>
-                    <p>Acredita-se que computadores são 100% neutros porque usam matemática. Contudo, os algoritmos aprendem com dados históricos humanos.</p>
+            <!-- Metadata Box Canva Style -->
+            <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl grid grid-cols-2 md:grid-cols-4 gap-6">
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Aprendiz</span>
+                    <p class="text-sm font-bold text-white font-display">Alejandro Cruz</p>
                 </div>
-                <div class="concept-card philosopher-highlight" style="border-left-color: var(--accent-pink);">
-                    <h3>⚠️ Preconceitos Automatizados</h3>
-                    <p>Se a sociedade possui preconceitos sociais, raciais ou de género, a IA amplifica essas desigualdades em sistemas de crédito, contratação e reconhecimento facial.</p>
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Instrutor / Prof.</span>
+                    <p class="text-sm font-bold text-white font-display">Fernando de Paula</p>
+                </div>
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Curso</span>
+                    <p class="text-sm font-bold text-amber-400 font-display">Assistente Administrativo</p>
+                </div>
+                <div>
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Local & Ano</span>
+                    <p class="text-sm font-bold text-white font-display">Sarandi PR, 2026</p>
                 </div>
             </div>
-            <div class="image-block">
-                <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1200&q=80" alt="Código matriz digital e rostos">
-                <div class="image-overlay">Ética na IA: Máquinas não são isentas; elas replicam o comportamento humano.</div>
-            </div>
-        </div>
 
-        <!-- SLIDE 8: Ética e Planeta -->
-        <div class="slide">
-            <div class="content-block">
-                <h2 class="slide-title">7. Ética & Impacto Ambiental</h2>
-                <div class="concept-card">
-                    <h3>🌱 A Crise Ecológica</h3>
-                    <p>O progresso ilimitado colidiu com os limites finitos da Terra. A tecnologia alterou o próprio clima do planeta.</p>
-                </div>
-                <div class="concept-card quote-style">
-                    <h3>📜 <span class="philosopher-name">Hans Jonas (Princípio Responsabilidade)</span></h3>
-                    <p>"Aja de modo que os efeitos da sua ação sejam compatíveis com a permanência de uma vida humana autêntica na Terra."</p>
-                </div>
-            </div>
-            <div class="image-block">
-                <img src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1200&q=80" alt="Planeta e Natureza em perigo">
-                <div class="image-overlay">Responsabilidade Intergeracional: Cuidar do futuro das próximas gerações.</div>
-            </div>
-        </div>
+            <!-- Page Footer -->
+            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
+                <span>PROMEC - Núcleo de Aprendizagem Profissional</span>
+                <span>Página 01</span>
+            </footer>
+        </article>
 
-        <!-- SLIDE 9: IA e Harari -->
-        <div class="slide">
-            <div class="content-block">
-                <h2 class="slide-title">8. IA, Controle & Pós-Humanismo</h2>
-                <div class="concept-card">
-                    <h3>🤖 O Poder dos Algoritmos</h3>
-                    <p>Sistemas automatizados que moldam preferências políticas, consumo e bolhas sociais de informação.</p>
-                </div>
-                <div class="concept-card philosopher-highlight">
-                    <h3>🔮 <span class="philosopher-name">Yuval Noah Harari</span></h3>
-                    <p>Alerta para o domínio dos dados e a automação global, que arrisca criar uma classe de pessoas "inúteis" do ponto de vista econômico.</p>
-                </div>
-            </div>
-            <div class="image-block">
-                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80" alt="Arte abstrata de Inteligência Artificial">
-                <div class="image-overlay">Harari: O avanço do Dataísmo e o futuro das decisões tomadas por IA.</div>
-            </div>
-        </div>
+        <!-- ==================== PÁGINA 2: INTRODUÇÃO ==================== -->
+        <article id="p2" class="a4-page justify-between">
+            <!-- Header -->
+            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
+                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 01</span>
+            </header>
 
-        <!-- SLIDE 10: Conclusão -->
-        <div class="slide">
-            <div class="content-block">
-                <h2 class="slide-title">9. Conclusão & Debate Aberto</h2>
-                <div class="concept-card">
-                    <h3>🎯 Resgate da Autonomia</h3>
-                    <p>A filosofia não busca destruir a tecnologia (neoludismo), mas libertar o ser humano da servidão cega ao progresso técnico.</p>
+            <!-- Main Content -->
+            <div class="my-auto space-y-6">
+                <div class="border-l-4 border-royal-500 pl-4 py-1">
+                    <h2 class="text-2xl font-bold text-slate-900 font-display">Introdução & Importância do Controle de Materiais</h2>
+                    <p class="text-xs text-slate-500 font-medium">A relevância da acuracidade de estoque para a sobrevivência corporativa.</p>
                 </div>
-                <div class="concept-card quote-style" style="border-left-color: var(--accent-cyan);">
-                    <p style="font-size: 1.4rem; color: var(--accent-cyan);">"Quantos de nós conseguiriam ficar 24h sem o telemóvel? A tecnologia é uma escolha livre ou uma dependência construída?"</p>
+
+                <p class="text-sm text-slate-600 leading-relaxed">
+                    O controle eficaz de materiais representa a espinha dorsal do departamento administrativo e logístico em qualquer organização moderna. Em um ambiente operacional de alta movimentação, o monitoramento rigoroso garante que os insumos e mercadorias cheguem ao destino com total preservação de seu valor comercial e utilidade prática.
+                </p>
+
+                <!-- 3 Pillars Grid -->
+                <div class="grid grid-cols-3 gap-4 my-6">
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-2">
+                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-royal-600 flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-chart-line"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-sm font-display">Proteção Financeira</h3>
+                        <p class="text-xs text-slate-500 leading-normal">
+                            Minimiza vazamentos silenciosos de capital causados por avarias e perdas físicas recorrentes.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-2">
+                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-boxes-stacked"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-sm font-display">Confiabilidade WMS</h3>
+                        <p class="text-xs text-slate-500 leading-normal">
+                            Garante a paridade exata entre o estoque contábil do sistema e a realidade física no galpão.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-2">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg">
+                            <i class="fa-solid fa-face-smile"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-800 text-sm font-display">Satisfação do Cliente</h3>
+                        <p class="text-xs text-slate-500 leading-normal">
+                            Assegura entregas em perfeito estado, reforçando o valor de marca frente aos parceiros comerciais.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Highlight Box Canva Style -->
+                <div class="bg-slate-900 text-white rounded-2xl p-6 relative overflow-hidden">
+                    <div class="relative z-10 space-y-2">
+                        <span class="text-amber-400 font-bold text-xs uppercase tracking-wider font-display">Diretriz Administrativa</span>
+                        <h4 class="text-base font-bold">O papel do Assistente Administrativo</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            Compete ao profissional administrativo estruturar auditorias, documentar discrepâncias e converter falhas operacionais em indicadores acionáveis para a tomada de decisão da gestão.
+                        </p>
+                    </div>
                 </div>
             </div>
-            <div class="image-block">
-                <img src="https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80" alt="Homem contemplando horizonte">
-                <div class="image-overlay">Encerramento: O papel da filosofia é devolver o pensamento crítico ao ser humano.</div>
+
+            <!-- Page Footer -->
+            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
+                <span>Alejandro Cruz • Assistente Administrativo</span>
+                <span>Página 02</span>
+            </footer>
+        </article>
+
+        <!-- ==================== PÁGINA 3: CONCEITUAÇÃO ==================== -->
+        <article id="p3" class="a4-page justify-between">
+            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
+                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 02</span>
+            </header>
+
+            <div class="my-auto space-y-6">
+                <div class="border-l-4 border-terracotta-500 pl-4 py-1">
+                    <h2 class="text-2xl font-bold text-slate-900 font-display">Diferenciação Técnica de Inconformidades</h2>
+                    <p class="text-xs text-slate-500 font-medium">Distinção clara entre perdas, quebras, faltas e avarias para o correto registro fiscal/operacional.</p>
+                </div>
+
+                <!-- 2x2 Clean Grid -->
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Card Avaria -->
+                    <div class="p-5 border border-slate-200 rounded-2xl bg-white shadow-sm space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-extrabold uppercase text-rose-600 bg-rose-50 px-2.5 py-1 rounded-md">Dano Estrutural</span>
+                            <i class="fa-solid fa-box-open text-rose-500"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base font-display">Avaria</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Dano físico, parcial ou visível, sofrido pelo material ou sua embalagem durante o manuseio, transporte ou armazenagem.
+                        </p>
+                        <div class="bg-slate-50 p-2.5 rounded-lg text-[11px] text-slate-500 border border-slate-100">
+                            <strong>Exemplo:</strong> Caixas rasgadas, latas amassadas, sacos perfurados no descarregamento.
+                        </div>
+                    </div>
+
+                    <!-- Card Falta -->
+                    <div class="p-5 border border-slate-200 rounded-2xl bg-white shadow-sm space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-extrabold uppercase text-amber-600 bg-amber-50 px-2.5 py-1 rounded-md">Divergência Quantitativa</span>
+                            <i class="fa-solid fa-calculator text-amber-500"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base font-display">Falta / Extravio</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Inconsistência na qual a contagem física resulta em quantidade inferior à constante na Nota Fiscal ou no manifesto.
+                        </p>
+                        <div class="bg-slate-50 p-2.5 rounded-lg text-[11px] text-slate-500 border border-slate-100">
+                            <strong>Exemplo:</strong> Recebimento de 90 volumes para uma nota fiscal que especifica 100 volumes.
+                        </div>
+                    </div>
+
+                    <!-- Card Quebra -->
+                    <div class="p-5 border border-slate-200 rounded-2xl bg-white shadow-sm space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-extrabold uppercase text-purple-600 bg-purple-50 px-2.5 py-1 rounded-md">Perda Irrecuperável</span>
+                            <i class="fa-solid fa-wine-bottle text-purple-500"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base font-display">Quebra</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Destruição total do item que inviabiliza completamente qualquer reaproveitamento comercial ou reparo técnico.
+                        </p>
+                        <div class="bg-slate-50 p-2.5 rounded-lg text-[11px] text-slate-500 border border-slate-100">
+                            <strong>Exemplo:</strong> Queda de palete com garrafas de vidro de azeite resultando em perda integral do lote.
+                        </div>
+                    </div>
+
+                    <!-- Card Perda Geral -->
+                    <div class="p-5 border border-slate-200 rounded-2xl bg-white shadow-sm space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-extrabold uppercase text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md">Conceito Amplo</span>
+                            <i class="fa-solid fa-chart-pie text-slate-600"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-base font-display">Perda Operacional</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Redução do valor financeiro do estoque ativo gerada por vencimento de validade, obsolescência ou furto.
+                        </p>
+                        <div class="bg-slate-50 p-2.5 rounded-lg text-[11px] text-slate-500 border border-slate-100">
+                            <strong>Exemplo:</strong> Lotes de perecíveis vencidos por descarte devido ao não cumprimento do FEFO.
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
+
+            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
+                <span>Alejandro Cruz • Assistente Administrativo</span>
+                <span>Página 03</span>
+            </footer>
+        </article>
+
+        <!-- ==================== PÁGINA 4: CAUSAS RAIZ ==================== -->
+        <article id="p4" class="a4-page justify-between">
+            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
+                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 03</span>
+            </header>
+
+            <div class="my-auto space-y-6">
+                <div class="border-l-4 border-royal-500 pl-4 py-1">
+                    <h2 class="text-2xl font-bold text-slate-900 font-display">Análise das Principais Causas de Avarias</h2>
+                    <p class="text-xs text-slate-500 font-medium">Mapeamento de vulnerabilidades operacionais ao longo do fluxo logístico.</p>
+                </div>
+
+                <!-- Structured Canva Table -->
+                <div class="overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
+                    <table class="w-full text-left text-xs border-collapse">
+                        <thead>
+                            <tr class="bg-slate-900 text-white font-display">
+                                <th class="p-3.5">Fase Logística</th>
+                                <th class="p-3.5">Causa Raiz Identificada</th>
+                                <th class="p-3.5">Efeito no Material</th>
+                                <th class="p-3.5">Nível de Risco</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 bg-white font-medium text-slate-700">
+                            <tr>
+                                <td class="p-3.5 font-bold text-slate-900">Transporte Extradoc</td>
+                                <td class="p-3.5">Frenagens bruscas e falta de peação/amarração.</td>
+                                <td class="p-3.5">Tombamento de paletes e esmagamento lateral.</td>
+                                <td class="p-3.5"><span class="bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded text-[10px]">CRÍTICO</span></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold text-slate-900">Armazenamento</td>
+                                <td class="p-3.5">Empilhamento acima do limite de resistência (lastro).</td>
+                                <td class="p-3.5">Deformação das caixas da base do palete.</td>
+                                <td class="p-3.5"><span class="bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded text-[10px]">CRÍTICO</span></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold text-slate-900">Movimentação Interna</td>
+                                <td class="p-3.5">Operação inadequada de empilhadeiras/paleteiras.</td>
+                                <td class="p-3.5">Perfuração de embalagens pelos garfos do equipamento.</td>
+                                <td class="p-3.5"><span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded text-[10px]">MÉDIO</span></td>
+                            </tr>
+                            <tr>
+                                <td class="p-3.5 font-bold text-slate-900">Recebimento</td>
+                                <td class="p-3.5">Conferência apressada sem inspeção de amostragem.</td>
+                                <td class="p-3.5">Aceite de mercadorias que já chegaram avariadas.</td>
+                                <td class="p-3.5"><span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded text-[10px]">MÉDIO</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Image Showcase Canva Style -->
+                <div class="grid grid-cols-2 gap-4 pt-2">
+                    <div class="rounded-2xl overflow-hidden relative shadow-sm border border-slate-200 h-40">
+                        <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80" alt="Incorrect Stacking" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-slate-900/40 flex items-end p-3">
+                            <span class="text-white text-[11px] font-medium">Falha de contenção em paletização</span>
+                        </div>
+                    </div>
+                    <div class="rounded-2xl overflow-hidden relative shadow-sm border border-slate-200 h-40">
+                        <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=800&q=80" alt="Forklift Operation" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-slate-900/40 flex items-end p-3">
+                            <span class="text-white text-[11px] font-medium">Risco operacional em movimentação com empilhadeira</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
+                <span>Alejandro Cruz • Assistente Administrativo</span>
+                <span>Página 04</span>
+            </footer>
+        </article>
+
+        <!-- ==================== PÁGINA 5: IDENTIFICAÇÃO ==================== -->
+        <article id="p5" class="a4-page justify-between">
+            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
+                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 04</span>
+            </header>
+
+            <div class="my-auto space-y-6">
+                <div class="border-l-4 border-terracotta-500 pl-4 py-1">
+                    <h2 class="text-2xl font-bold text-slate-900 font-display">Processo de Identificação e Conferência</h2>
+                    <p class="text-xs text-slate-500 font-medium">Procedimento Operacional Padrão (POP) para o recebimento de materiais.</p>
+                </div>
+
+                <!-- Steps Horizontal Process Canva Style -->
+                <div class="space-y-4">
+                    <div class="flex items-start space-x-4 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                        <div class="w-10 h-10 rounded-xl bg-slate-900 text-white font-bold flex items-center justify-center flex-shrink-0 font-display">
+                            01
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="font-bold text-slate-900 text-sm font-display">Inspeção Visual Externa das Docas</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Avaliar o estado do veículo transportador no momento da abertura do furgão. Observar sinais de umidade no assoalho, odores atípicos ou cargas visivelmente tombadas.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                        <div class="w-10 h-10 rounded-xl bg-royal-600 text-white font-bold flex items-center justify-center flex-shrink-0 font-display">
+                            02
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="font-bold text-slate-900 text-sm font-display">Conferência Cega por Amostragem</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Executar a contagem física sem acesso prévio à nota fiscal e abrir percentual normatizado de caixas fechadas para verificar a integridade da embalagem primária.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-start space-x-4 p-4 bg-slate-50 rounded-2xl border border-slate-200">
+                        <div class="w-10 h-10 rounded-xl bg-terracotta-500 text-white font-bold flex items-center justify-center flex-shrink-0 font-display">
+                            03
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="font-bold text-slate-900 text-sm font-display">Segregação & Identificação Visual</h3>
+                            <p class="text-xs text-slate-600 leading-relaxed">
+                                Separar imediatamente qualquer item defeituoso, aplicando a etiqueta amarela de alerta e impedindo sua entrada na área de armazenagem padrão.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Callout Box -->
+                <div class="p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-xl space-y-1">
+                    <h4 class="font-bold text-amber-900 text-xs font-display flex items-center">
+                        <i class="fa-solid fa-triangle-exclamation mr-2"></i> Importância da Ressalva no CTe
+                    </h4>
+                    <p class="text-xs text-amber-800 leading-relaxed">
+                        Qualquer irregularidade notada durante o descarregamento DEVE ser anotada no verso do Conhecimento de Transporte Eletrônico (CTe) antes de assinar o canhoto de recebimento.
+                    </p>
+                </div>
+            </div>
+
+            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
+                <span>Alejandro Cruz • Assistente Administrativo</span>
+                <span>Página 05</span>
+            </footer>
+        </article>
+
+        <!-- ==================== PÁGINA 6: FICHA DE OCORRÊNCIA ==================== -->
+        <article id="p6" class="a4-page justify-between">
+            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
+                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 05</span>
+            </header>
+
+            <div class="my-auto space-y-4">
+                <div class="border-l-4 border-royal-500 pl-4 py-1">
+                    <h2 class="text-xl font-bold text-slate-900 font-display">Registro da Ocorrência e Documentação</h2>
+                    <p class="text-xs text-slate-500 font-medium">Modelo oficial de Ficha de Ocorrência de Avarias preenchido.</p>
+                </div>
+
+                <!-- Formal Document Canvas Style -->
+                <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm text-xs">
+                    <div class="flex justify-between items-center border-b border-slate-200 pb-3">
+                        <div>
+                            <span class="font-black text-slate-900 font-display text-sm block">FICHA DE REGISTRO DE AVARIA (FRA)</span>
+                            <span class="text-[10px] text-slate-500">Unidade Operacional Sarandi PR</span>
+                        </div>
+                        <span class="font-mono bg-slate-900 text-amber-400 font-bold px-3 py-1 rounded-md">Nº 2026-089</span>
+                    </div>
+
+                    <!-- Metadata Grid -->
+                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 bg-white p-3 rounded-xl border border-slate-200">
+                        <div>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Data/Hora</span>
+                            <span class="font-bold text-slate-800">05/10/2026 - 14:30</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Setor/Docas</span>
+                            <span class="font-bold text-slate-800">Doca 02 (Recebimento)</span>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Responsável</span>
+                            <span class="font-bold text-royal-600">Alejandro Cruz</span>
+                        </div>
+                    </div>
+
+                    <!-- Product Specs Table -->
+                    <table class="w-full text-left border-collapse bg-white rounded-xl overflow-hidden border border-slate-200">
+                        <thead class="bg-slate-100 text-slate-700 font-bold">
+                            <tr>
+                                <th class="p-2 border-b">Código/SKU</th>
+                                <th class="p-2 border-b">Descrição do Produto</th>
+                                <th class="p-2 border-b">Qtd. Total</th>
+                                <th class="p-2 border-b">Qtd. Avariada</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-slate-700">
+                            <tr>
+                                <td class="p-2 font-mono">SKU-8841-B</td>
+                                <td class="p-2 font-bold">Detergente Industrial 5L (Caixa c/ 4)</td>
+                                <td class="p-2">120 caixas</td>
+                                <td class="p-2 text-rose-600 font-bold">14 caixas</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Incident Details -->
+                    <div class="space-y-2 bg-white p-3 rounded-xl border border-slate-200">
+                        <div>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Descrição da Inconformidade</span>
+                            <p class="text-slate-700 leading-snug">
+                                Caixa de papelão inferior totalmente deformada por vazamento em galão de plástico rompido por atrito no transporte.
+                            </p>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Ação Imediata Executada</span>
+                            <p class="text-slate-700 leading-snug">
+                                Isolamento na Área Vermelha de Quarentena, emissão do termo de devolução parcial ao motorista da transportadora.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Approval Signatures Grid -->
+                    <div class="pt-4 grid grid-cols-2 gap-6 text-center border-t border-slate-200">
+                        <div class="border-t border-slate-300 pt-1">
+                            <span class="font-bold text-slate-800 block text-[11px]">Alejandro Cruz</span>
+                            <span class="text-[9px] text-slate-400 uppercase">Aprendiz / Assistente Adm.</span>
+                        </div>
+                        <div class="border-t border-slate-300 pt-1">
+                            <span class="font-bold text-slate-800 block text-[11px]">Fernando de Paula</span>
+                            <span class="text-[9px] text-slate-400 uppercase">Instrutor / Supervisor</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
+                <span>Alejandro Cruz • Assistente Administrativo</span>
+                <span>Página 06</span>
+            </footer>
+        </article>
+
+        <!-- ==================== PÁGINA 7: CONTENÇÃO ==================== -->
+        <article id="p7" class="a4-page justify-between">
+            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
+                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 06</span>
+            </header>
+
+            <div class="my-auto space-y-6">
+                <div class="border-l-4 border-terracotta-500 pl-4 py-1">
+                    <h2 class="text-2xl font-bold text-slate-900 font-display">Procedimentos de Contenção & Quarentena</h2>
+                    <p class="text-xs text-slate-500 font-medium">Medidas para conter a contaminação do estoque bom e destinação segura.</p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <!-- Isolation Box -->
+                    <div class="bg-rose-50 border border-rose-200 rounded-2xl p-5 space-y-2">
+                        <div class="w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-lock"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-sm font-display">Isolamento em Gaiola Fechada</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Todos os itens retidos em avaria devem ser armazenados em gaiolas físicas trancadas ("Área Vermelha"), com controle estrito de chave sob custódia da administração.
+                        </p>
+                    </div>
+
+                    <!-- System Block -->
+                    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 space-y-2">
+                        <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-900 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-ban"></i>
+                        </div>
+                        <h3 class="font-bold text-slate-900 text-sm font-display">Bloqueio Sistêmico WMS</h3>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            O saldo físico avariado deve ser alterado no sistema ERP/WMS para a condição de "Inativo / Em Análise", impossibilitando sua liberação para picking ou venda.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Warning Banner Canva Style -->
+                <div class="bg-slate-900 text-white p-6 rounded-2xl space-y-3 relative overflow-hidden">
+                    <div class="flex items-center space-x-3 text-terracotta-500">
+                        <i class="fa-solid fa-shield-cat text-2xl"></i>
+                        <h3 class="font-bold font-display text-sm text-white">Proibição de Comercialização</h3>
+                    </div>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        É expressamente proibido colocar em circulação produtos com embalagens violadas ou amassadas, sob risco de sanções do Procon, Vigilância Sanitária e perda irreversível de reputação corporativa.
+                    </p>
+                </div>
+            </div>
+
+            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
+                <span>Alejandro Cruz • Assistente Administrativo</span>
+                <span>Página 07</span>
+            </footer>
+        </article>
+
+        <!-- ==================== PÁGINA 8: GESTÃO PREVENTIVA ==================== -->
+        <article id="p8" class="a4-page justify-between">
+            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
+                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 07</span>
+            </header>
+
+            <div class="my-auto space-y-6">
+                <div class="border-l-4 border-royal-500 pl-4 py-1">
+                    <h2 class="text-2xl font-bold text-slate-900 font-display">Gestão Preventiva & Boas Práticas</h2>
+                    <p class="text-xs text-slate-500 font-medium">Adoção de métodos organizacionais para mitigar quebras e avarias.</p>
+                </div>
+
+                <!-- 2-Column Grid with Icons -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="p-4 border border-slate-200 rounded-2xl bg-white space-y-2">
+                        <div class="flex items-center space-x-2 text-royal-600 font-bold text-xs font-display">
+                            <i class="fa-solid fa-broom text-amber-500"></i>
+                            <span>Programa 5S</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Manter corredores livres de entulhos, caixas rasgadas e pallets danificados que possam provocar acidentes com equipamentos.
+                        </p>
+                    </div>
+
+                    <div class="p-4 border border-slate-200 rounded-2xl bg-white space-y-2">
+                        <div class="flex items-center space-x-2 text-royal-600 font-bold text-xs font-display">
+                            <i class="fa-solid fa-rotate text-amber-500"></i>
+                            <span>Regra PEPS / FIFO</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Primeiro que Entra, Primeiro que Sai. Garante o giro correto dos lotes mais antigos, prevenindo a perda por prazo de validade.
+                        </p>
+                    </div>
+
+                    <div class="p-4 border border-slate-200 rounded-2xl bg-white space-y-2">
+                        <div class="flex items-center space-x-2 text-royal-600 font-bold text-xs font-display">
+                            <i class="fa-solid fa-graduation-cap text-amber-500"></i>
+                            <span>Treinamento de Equipe</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Reciclagem contínua dos operadores de empilhadeira em técnicas seguras de movimentação e peação de cargas em paletes.
+                        </p>
+                    </div>
+
+                    <div class="p-4 border border-slate-200 rounded-2xl bg-white space-y-2">
+                        <div class="flex items-center space-x-2 text-royal-600 font-bold text-xs font-display">
+                            <i class="fa-solid fa-screwdriver-wrench text-amber-500"></i>
+                            <span>Manutenção Preditiva</span>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Revisão periódica das estruturas de porta-paletes para evitar colapsos mecânicos nas áreas de alta verticalização.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Unsplash Banner -->
+                <div class="rounded-2xl overflow-hidden h-36 relative border border-slate-200">
+                    <img src="https://images.unsplash.com/photo-1580674684081-7617fbf3d745?auto=format&fit=crop&w=1000&q=80" alt="Organized Warehouse" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-transparent flex items-center p-6">
+                        <span class="text-white text-xs font-medium max-w-xs">A excelência na organização visual reduz em até 45% o índice de avarias internas.</span>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
+                <span>Alejandro Cruz • Assistente Administrativo</span>
+                <span>Página 08</span>
+            </footer>
+        </article>
+
+        <!-- ==================== PÁGINA 9: PLANO DE AÇÃO ==================== -->
+        <article id="p9" class="a4-page justify-between">
+            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
+                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 08</span>
+            </header>
+
+            <div class="my-auto space-y-6">
+                <div class="border-l-4 border-terracotta-500 pl-4 py-1">
+                    <h2 class="text-2xl font-bold text-slate-900 font-display">Plano de Ação Corretivo (5W2H)</h2>
+                    <p class="text-xs text-slate-500 font-medium">Metodologia estruturada para redução de custos decorrentes de avarias em Sarandi PR.</p>
+                </div>
+
+                <!-- 5W2H Table Canva Style -->
+                <div class="overflow-hidden rounded-2xl border border-slate-200 shadow-sm text-xs">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-900 text-white font-display">
+                                <th class="p-3">O que? (What)</th>
+                                <th class="p-3">Por quê? (Why)</th>
+                                <th class="p-3">Quem? (Who)</th>
+                                <th class="p-3">Como? (How)</th>
+                                <th class="p-3">Prazo</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 bg-white font-medium text-slate-700">
+                            <tr>
+                                <td class="p-3 font-bold text-slate-900">Instalação de cantoneiras nas cargas</td>
+                                <td class="p-3">Evitar o esmagamento das caixas nas bordas dos paletes.</td>
+                                <td class="p-3 font-semibold text-royal-600">Equipe de Expedição</td>
+                                <td class="p-3">Fixação de cantoneiras de papelão rígido antes de passar o filme stretch.</td>
+                                <td class="p-3 font-mono font-bold">Imediato</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-900">Treinamento de Empilhadeiristas</td>
+                                <td class="p-3">Reduzir perfurações de sacarias e embalagens plásticas.</td>
+                                <td class="p-3 font-semibold text-royal-600">Fernando de Paula</td>
+                                <td class="p-3">Workshop prático sobre manuseio seguro e limites de carga.</td>
+                                <td class="p-3 font-mono font-bold">15 dias</td>
+                            </tr>
+                            <tr>
+                                <td class="p-3 font-bold text-slate-900">Auditoria Mensal de Acuracidade</td>
+                                <td class="p-3">Identificar gargalos em tempo real e ajustar o WMS.</td>
+                                <td class="p-3 font-semibold text-royal-600">Alejandro Cruz</td>
+                                <td class="p-3">Inventários rotativos por amostragem nas áreas críticas.</td>
+                                <td class="p-3 font-mono font-bold">Mensal</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Target Indicators Box -->
+                <div class="grid grid-cols-3 gap-4 text-center">
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                        <span class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Meta de Redução</span>
+                        <span class="text-2xl font-black text-emerald-600 font-display">- 35%</span>
+                        <span class="text-[10px] text-slate-500 block mt-1">no primeiro trimestre</span>
+                    </div>
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                        <span class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Acuracidade Meta</span>
+                        <span class="text-2xl font-black text-royal-600 font-display">99.2%</span>
+                        <span class="text-[10px] text-slate-500 block mt-1">estoque físico x sistema</span>
+                    </div>
+                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
+                        <span class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Retorno (ROI)</span>
+                        <span class="text-2xl font-black text-terracotta-500 font-display">R$ 18k</span>
+                        <span class="text-[10px] text-slate-500 block mt-1">economia estimada/ano</span>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
+                <span>Alejandro Cruz • Assistente Administrativo</span>
+                <span>Página 09</span>
+            </footer>
+        </article>
+
+        <!-- ==================== PÁGINA 10: CONCLUSÃO ==================== -->
+        <article id="p10" class="a4-page justify-between">
+            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
+                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 09</span>
+            </header>
+
+            <div class="my-auto space-y-6">
+                <div class="border-l-4 border-royal-500 pl-4 py-1">
+                    <h2 class="text-2xl font-bold text-slate-900 font-display">Conclusão & Referências Bibliográficas</h2>
+                    <p class="text-xs text-slate-500 font-medium">Sintese das considerações finais do aprendiz e fontes consultadas.</p>
+                </div>
+
+                <!-- Learner Statement Box -->
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-3">
+                    <h3 class="font-bold text-slate-900 text-sm font-display flex items-center text-royal-600">
+                        <i class="fa-solid fa-quote-left mr-2"></i> Considerações Finais do Aprendiz
+                    </h3>
+                    <p class="text-xs text-slate-600 leading-relaxed italic">
+                        "A confecção deste relatório permitiu consolidar a visão prática de que o controle de avarias não é um custo inevitável do processo, mas sim uma falha de gestão passível de eliminação. A atuação proativa do Assistente Administrativo no registro, comunicação rápida e implementação de planos de ação transforma o ambiente operacional da PROMEC em um modelo mais seguro, rentável e eficiente."
+                    </p>
+                    <span class="text-xs font-bold text-slate-800 block text-right font-display">— Alejandro Cruz, Sarandi PR 2026</span>
+                </div>
+
+                <!-- Academic References -->
+                <div class="space-y-3 pt-2">
+                    <h3 class="font-bold text-slate-900 text-xs uppercase tracking-wider font-display">Referências Bibliográficas</h3>
+                    <ul class="space-y-2 text-xs text-slate-600">
+                        <li class="flex items-start space-x-2">
+                            <span class="text-terracotta-500 font-bold">•</span>
+                            <span><strong>BALLOU, Ronald H.</strong> Gerenciamento da Cadeia de Suprimentos / Logística Empresarial. 5ª Edição. Porto Alegre: Bookman, 2006.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-terracotta-500 font-bold">•</span>
+                            <span><strong>VIANA, João José.</strong> Administração de Materiais: Um Enfoque Prático. São Paulo: Atlas, 2010.</span>
+                        </li>
+                        <li class="flex items-start space-x-2">
+                            <span class="text-terracotta-500 font-bold">•</span>
+                            <span><strong>PROMEC Sarandi.</strong> Apostila de Operações de Almoxarifado e Rotinas Administrativas. Sarandi - PR, 2026.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
+                <span>Alejandro Cruz • Assistente Administrativo</span>
+                <span>Página 10</span>
+            </footer>
+        </article>
 
     </main>
 
-    <footer>
-        <div class="nav-controls">
-            <button class="btn" id="prevBtn" onclick="navigate(-1)">← Anterior</button>
-            <button class="btn" id="nextBtn" onclick="navigate(1)">Próximo →</button>
-        </div>
-        <div class="keyboard-hint">
-            <span>Navegação:</span>
-            <span class="key-badge">←</span>
-            <span class="key-badge">→</span>
-            <span>ou Espaço na TV</span>
-        </div>
-    </footer>
-
+    <!-- Smooth Scrolling for Anchor Links -->
     <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const slideCounter = document.getElementById('slideCounter');
-        const progressBar = document.getElementById('progressBar');
-        const prevBtn = document.getElementById('prevBtn');
-        const nextBtn = document.getElementById('nextBtn');
-
-        function updateSlide() {
-            slides.forEach((slide, idx) => {
-                slide.classList.remove('active');
-                if (idx === currentSlide) {
-                    slide.classList.add('active');
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
                 }
             });
-
-            // Atualiza o contador de slides
-            slideCounter.textContent = `Slide ${currentSlide + 1} de ${slides.length}`;
-            
-            // Atualiza a barra de progresso no topo
-            const progressPercent = ((currentSlide + 1) / slides.length) * 100;
-            progressBar.style.width = `${progressPercent}%`;
-
-            // Ativa/Desativa botões
-            prevBtn.disabled = currentSlide === 0;
-            nextBtn.disabled = currentSlide === slides.length - 1;
-        }
-
-        function navigate(direction) {
-            currentSlide += direction;
-            if (currentSlide < 0) currentSlide = 0;
-            if (currentSlide >= slides.length) currentSlide = slides.length - 1;
-            updateSlide();
-        }
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
-                if (currentSlide < slides.length - 1) navigate(1);
-            } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
-                if (currentSlide > 0) navigate(-1);
-            }
         });
-
-        function toggleFullScreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(err => {
-                    alert(`Erro ao ativar tela cheia: ${err.message}`);
-                });
-            } else {
-                if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                }
-            }
-        }
-
-        updateSlide();
     </script>
 </body>
 </html>
