@@ -3,911 +3,1033 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Relatório de Ocorrência de Avarias - PROMEC</title>
-    <!-- Tailwind CSS CDN -->
+    <title>PLAYTIME CO. - Manual de Integração do Funcionário</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Google Fonts: Plus Jakarta Sans & Outfit -->
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        navy: {
-                            50: '#f0f4f8',
-                            100: '#d9e2ec',
-                            500: '#334e68',
-                            800: '#102a43',
-                            900: '#0f172a',
-                        },
-                        royal: {
-                            500: '#2563eb',
-                            600: '#1d4ed8',
-                        },
-                        terracotta: {
-                            500: '#f97316',
-                            600: '#ea580c',
-                        },
-                        slate: {
-                            800: '#1e293b',
-                            900: '#0f172a',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                        display: ['Outfit', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Creepster&family=VT323&display=swap" rel="stylesheet">
+
     <style>
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            background-color: #0f172a;
-            color: #334155;
+        body {
+            background-color: #050508;
+            color: #d1d5db;
+            font-family: 'Share Tech Mono', monospace;
+            overflow-x: hidden;
+            user-select: none;
         }
 
-        h1, h2, h3, h4, .font-display {
-            font-family: 'Outfit', sans-serif;
+        /* Efeito CRT / VHS */
+        .crt::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.05), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.05));
+            z-index: 50;
+            background-size: 100% 3px, 6px 100%;
+            pointer-events: none;
         }
 
-        /* Standard A4 Page Layout for Preview and Print */
-        .a4-page {
-            width: 210mm;
-            min-height: 297mm;
-            padding: 20mm;
-            margin: 20mm auto;
-            background: #ffffff;
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            border-radius: 4px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            box-sizing: border-box;
-            page-break-after: always;
+        .scanline {
+            width: 100%;
+            height: 120px;
+            z-index: 51;
+            background: linear-gradient(0deg, rgba(0,0,0,0) 0%, rgba(255, 255, 255, 0.08) 10%, rgba(0,0,0,0) 100%);
+            opacity: 0.7;
+            position: fixed;
+            bottom: 100%;
+            pointer-events: none;
+            animation: scanline 7s linear infinite;
         }
 
-        @media print {
-            body {
-                background: none !important;
-                padding: 0 !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-            .a4-page {
-                margin: 0 !important;
-                box-shadow: none !important;
-                border-radius: 0 !important;
-                width: 100% !important;
-                min-height: 100vh !important;
-                padding: 15mm !important;
-                page-break-after: always !important;
-            }
+        @keyframes scanline {
+            0% { top: -10%; }
+            100% { top: 110%; }
         }
 
-        /* Custom Scrollbar for App Sidebars */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #f97316; }
-
-        .editorial-accent {
-            background: linear-gradient(135deg, #2563eb 0%, #0f172a 100%);
+        .glitch-text {
+            text-shadow: 2px 0 #e60000, -2px 0 #0055ff;
+            animation: glitch-anim 2s infinite alternate;
         }
-        
-        .terracotta-accent {
-            background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+
+        @keyframes glitch-anim {
+            0% { text-shadow: 2px 0 #e60000, -2px 0 #0055ff; }
+            50% { text-shadow: -2px 0 #e60000, 2px 0 #0055ff; }
+            100% { text-shadow: 1px -1px #e60000, -1px 1px #0055ff; }
+        }
+
+        /* Lanterna / Flashlight Overlay */
+        #flashlight-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 45;
+            transition: background 0.1s ease;
+        }
+
+        /* Molduras Industriais */
+        .playtime-border-red {
+            border: 3px solid #dc2626;
+            box-shadow: 0 0 15px rgba(220, 38, 38, 0.3);
+        }
+
+        .playtime-border-blue {
+            border: 3px solid #2563eb;
+            box-shadow: 0 0 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .playtime-border-yellow {
+            border: 3px solid #eab308;
+            box-shadow: 0 0 15px rgba(234, 179, 8, 0.3);
+        }
+
+        /* Estilo Censurado */
+        .censored {
+            background-color: #111;
+            color: #ef4444;
+            border-bottom: 2px dashed #ef4444;
+            cursor: pointer;
+            padding: 0 4px;
+            transition: all 0.3s;
+        }
+        .censored:hover, .censored.revealed {
+            background-color: #ef4444;
+            color: #000;
+            font-weight: bold;
+        }
+
+        /* Efeito Tremor de Tela para Jumpscare */
+        @keyframes shake {
+            0% { transform: translate(2px, 2px) rotate(0deg); }
+            20% { transform: translate(-4px, -2px) rotate(-1deg); }
+            40% { transform: translate(-3px, 0px) rotate(1deg); }
+            60% { transform: translate(3px, 2px) rotate(0deg); }
+            80% { transform: translate(2px, -2px) rotate(2deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        .jumpscare-shake {
+            animation: shake 0.08s infinite;
         }
     </style>
 </head>
-<body class="bg-slate-900 text-slate-800 min-h-screen flex flex-col md:flex-row antialiased">
+<body class="crt relative">
 
-    <!-- Navigation / Floating Controls Bar -->
-    <aside class="w-full md:w-80 bg-slate-900 border-r border-slate-800 text-slate-300 flex-shrink-0 flex flex-col justify-between h-screen sticky top-0 no-print z-50">
-        <div class="p-6">
-            <!-- Brand Badge -->
-            <div class="flex items-center space-x-3 mb-8 pb-6 border-b border-slate-800">
-                <div class="bg-gradient-to-tr from-amber-500 to-terracotta-500 w-10 h-10 rounded-xl flex items-center justify-center text-slate-950 font-black text-xl shadow-lg">
-                    P
-                </div>
+    <!-- Overlay de Lanterna Dinâmica -->
+    <div id="flashlight-overlay"></div>
+
+    <!-- Efeito de Varredura VHS -->
+    <div class="scanline"></div>
+
+    <!-- Botão Flutuante Fixo: Lanterna -->
+    <div class="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
+        <button onclick="toggleEmergencyAlarm()" class="bg-red-600 hover:bg-red-700 text-white font-bold p-3 rounded-full shadow-2xl border-2 border-yellow-400 animate-pulse flex items-center justify-center font-mono text-xs">
+            🚨 ALARME
+        </button>
+        <button onclick="cycleFlashlightMode()" id="btn-flashlight" class="bg-yellow-500 hover:bg-yellow-400 text-black font-extrabold p-3 rounded-full shadow-2xl border-2 border-black flex items-center justify-center font-mono text-xs">
+            🔦 LANTERNA: FOCO
+        </button>
+    </div>
+
+    <!-- Barra de Alerta / Header Playtime Co. -->
+    <header class="bg-black/90 border-b-4 border-yellow-500 p-4 sticky top-0 z-40 backdrop-blur">
+        <div class="max-w-6xl mx-auto flex flex-wrap justify-between items-center gap-4">
+            <div class="flex items-center space-x-3">
+                <!-- Logo SVG Nativo Playtime Co -->
+                <svg class="w-10 h-10" viewBox="0 0 100 100">
+                    <rect x="5" y="5" width="90" height="90" rx="15" fill="#dc2626" stroke="#facc15" stroke-width="6"/>
+                    <text x="50" y="68" font-family="'VT323', monospace" font-size="65" font-weight="bold" fill="#facc15" text-anchor="middle">P</text>
+                </svg>
                 <div>
-                    <h1 class="font-display font-bold text-white text-lg leading-tight tracking-wide">PROMEC</h1>
-                    <p class="text-xs text-slate-400 font-medium">Relatório Técnico Canva Premium</p>
+                    <h1 class="text-2xl font-extrabold tracking-widest text-yellow-400 font-mono glitch-text">PLAYTIME CO.</h1>
+                    <p class="text-xs text-gray-400">SISTEMA DE INTEGRAÇÃO DE FUNCIONÁRIOS v4.02 - 1995</p>
                 </div>
             </div>
-
-            <div class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3 px-2">Estrutura do Documento</div>
             
-            <!-- Dynamic Navigation Links -->
-            <nav class="space-y-1.5 overflow-y-auto max-h-[calc(100vh-260px)] pr-2">
-                <a href="#p1" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg bg-slate-800 text-amber-400 font-semibold transition">
-                    <span class="w-6 font-mono text-slate-500">01</span> Capa Editorial
-                </a>
-                <a href="#p2" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
-                    <span class="w-6 font-mono text-slate-500">02</span> Introdução & Importância
-                </a>
-                <a href="#p3" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
-                    <span class="w-6 font-mono text-slate-500">03</span> Conceituação Técnica
-                </a>
-                <a href="#p4" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
-                    <span class="w-6 font-mono text-slate-500">04</span> Análise de Causas Raiz
-                </a>
-                <a href="#p5" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
-                    <span class="w-6 font-mono text-slate-500">05</span> Identificação & Triagem
-                </a>
-                <a href="#p6" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
-                    <span class="w-6 font-mono text-slate-500">06</span> Ficha de Ocorrência
-                </a>
-                <a href="#p7" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
-                    <span class="w-6 font-mono text-slate-500">07</span> Procedimentos de Contenção
-                </a>
-                <a href="#p8" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
-                    <span class="w-6 font-mono text-slate-500">08</span> Gestão Preventiva & 5S
-                </a>
-                <a href="#p9" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
-                    <span class="w-6 font-mono text-slate-500">09</span> Plano de Ação 5W2H
-                </a>
-                <a href="#p10" class="flex items-center px-3 py-2.5 text-xs font-medium rounded-lg hover:bg-slate-800 hover:text-white transition">
-                    <span class="w-6 font-mono text-slate-500">10</span> Conclusão & Fontes
-                </a>
-            </nav>
+            <div class="flex items-center gap-3 text-sm">
+                <button id="btn-audio" onclick="toggleAmbience()" class="bg-zinc-900 border border-yellow-500 hover:bg-yellow-500 hover:text-black px-3 py-1.5 rounded text-yellow-400 transition font-mono">
+                    🎵 TRILHA SONORA: OFF
+                </button>
+                <button onclick="triggerGlitchEffect()" class="bg-red-950 border border-red-600 hover:bg-red-600 hover:text-white px-3 py-1.5 rounded text-red-400 transition font-mono">
+                    ⚠️ FALHA VHS
+                </button>
+            </div>
         </div>
+    </header>
 
-        <!-- Sidebar Actions -->
-        <div class="p-6 border-t border-slate-800 space-y-3">
-            <button onclick="window.print()" class="w-full bg-gradient-to-r from-royal-500 to-royal-600 hover:from-royal-600 hover:to-blue-700 text-white py-3 px-4 rounded-xl font-bold text-xs shadow-lg flex items-center justify-center space-x-2 transition">
-                <i class="fa-solid fa-print"></i>
-                <span>Exportar PDF / Imprimir A4</span>
-            </button>
-        </div>
-    </aside>
+    <!-- Conteúdo Principal do Manual -->
+    <main class="max-w-5xl mx-auto px-4 py-8 space-y-12">
 
-    <!-- Document Container -->
-    <main class="flex-1 overflow-y-auto bg-slate-950 p-4 md:p-8 flex flex-col items-center">
-
-        <!-- ==================== PÁGINA 1: CAPA EDITORIAL ==================== -->
-        <article id="p1" class="a4-page relative overflow-hidden justify-between border-t-8 border-terracotta-500">
-            <!-- Header Banner -->
-            <div class="flex items-center justify-between border-b border-slate-200 pb-6">
-                <div>
-                    <span class="text-xs font-black tracking-widest text-terracotta-500 uppercase">Documento Técnico Exclusivo</span>
-                    <h2 class="text-2xl font-black text-slate-900 tracking-tight font-display">PROMEC</h2>
+        <!-- Banner de Boas-Vindas Assustador -->
+        <section class="bg-zinc-950 p-6 rounded-lg playtime-border-yellow relative overflow-hidden">
+            <div class="relative z-10 space-y-4">
+                <div class="inline-block bg-yellow-500 text-black px-3 py-1 text-xs font-bold tracking-widest uppercase rounded">
+                    DOCUMENTO CONFIDENCIAL - Apenas para novos contratados
                 </div>
-                <div class="text-right">
-                    <span class="text-xs font-semibold text-slate-400 block uppercase">Código de Controle</span>
-                    <span class="text-xs font-mono font-bold bg-slate-100 text-slate-800 px-3 py-1 rounded-full border border-slate-200">REL-AVAR-2026/SRD</span>
-                </div>
-            </div>
-
-            <!-- Hero Section with Images Grid -->
-            <div class="my-8 space-y-6">
-                <div class="space-y-3">
-                    <span class="bg-blue-50 text-royal-600 text-xs font-bold px-3 py-1.5 rounded-md uppercase tracking-wider border border-blue-100 inline-block">
-                        Assistência Administrativa & Logística
-                    </span>
-                    <h1 class="text-4xl font-extrabold text-slate-900 leading-tight font-display tracking-tight">
-                        Relatório de Ocorrência de Avarias
-                    </h1>
-                    <p class="text-lg text-slate-600 font-medium">
-                        Diretrizes de Controle de Materiais, Prevenção de Perdas e Gestão de Qualidade em Armazenagem.
-                    </p>
-                </div>
-
-                <!-- Editorial Composite Grid Images -->
-                <div class="grid grid-cols-12 gap-3 h-64 my-6">
-                    <div class="col-span-8 rounded-2xl overflow-hidden relative shadow-md">
-                        <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80" alt="Warehouse Operations" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent flex items-end p-4">
-                            <span class="text-white text-xs font-medium">Centro de Distribuição & Logística de Suprimentos</span>
-                        </div>
-                    </div>
-                    <div class="col-span-4 grid grid-rows-2 gap-3">
-                        <div class="rounded-xl overflow-hidden shadow-sm relative">
-                            <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?auto=format&fit=crop&w=600&q=80" alt="Inventory Inspection" class="w-full h-full object-cover">
-                        </div>
-                        <div class="rounded-xl overflow-hidden shadow-sm relative">
-                            <img src="https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&w=600&q=80" alt="Packaging Control" class="w-full h-full object-cover">
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Metadata Box Canva Style -->
-            <div class="bg-slate-900 text-white rounded-2xl p-6 shadow-xl grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Aprendiz</span>
-                    <p class="text-sm font-bold text-white font-display">Alejandro Cruz</p>
-                </div>
-                <div>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Instrutor / Prof.</span>
-                    <p class="text-sm font-bold text-white font-display">Fernando de Paula</p>
-                </div>
-                <div>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Curso</span>
-                    <p class="text-sm font-bold text-amber-400 font-display">Assistente Administrativo</p>
-                </div>
-                <div>
-                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400 block mb-1">Local & Ano</span>
-                    <p class="text-sm font-bold text-white font-display">Sarandi PR, 2026</p>
-                </div>
-            </div>
-
-            <!-- Page Footer -->
-            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
-                <span>PROMEC - Núcleo de Aprendizagem Profissional</span>
-                <span>Página 01</span>
-            </footer>
-        </article>
-
-        <!-- ==================== PÁGINA 2: INTRODUÇÃO ==================== -->
-        <article id="p2" class="a4-page justify-between">
-            <!-- Header -->
-            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
-                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 01</span>
-            </header>
-
-            <!-- Main Content -->
-            <div class="my-auto space-y-6">
-                <div class="border-l-4 border-royal-500 pl-4 py-1">
-                    <h2 class="text-2xl font-bold text-slate-900 font-display">Introdução & Importância do Controle de Materiais</h2>
-                    <p class="text-xs text-slate-500 font-medium">A relevância da acuracidade de estoque para a sobrevivência corporativa.</p>
-                </div>
-
-                <p class="text-sm text-slate-600 leading-relaxed">
-                    O controle eficaz de materiais representa a espinha dorsal do departamento administrativo e logístico em qualquer organização moderna. Em um ambiente operacional de alta movimentação, o monitoramento rigoroso garante que os insumos e mercadorias cheguem ao destino com total preservação de seu valor comercial e utilidade prática.
+                <h2 class="text-3xl md:text-4xl font-bold text-white uppercase tracking-wider font-mono">
+                    Bem-vindo à Família Playtime!
+                </h2>
+                <p class="text-gray-300 leading-relaxed">
+                    Você foi selecionado para fazer parte da maior fábrica de brinquedos do mundo! Na <span class="text-yellow-400 font-bold">Playtime Co.</span>, nossa missão é trazer alegria a milhões de crianças. Porém, para manter nossos segredos de fabricação protegidos e nossas instalações funcionando perfeitamente, você deve seguir este manual rigorosamente.
                 </p>
-
-                <!-- 3 Pillars Grid -->
-                <div class="grid grid-cols-3 gap-4 my-6">
-                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-2">
-                        <div class="w-10 h-10 rounded-xl bg-blue-100 text-royal-600 flex items-center justify-center font-bold text-lg">
-                            <i class="fa-solid fa-chart-line"></i>
-                        </div>
-                        <h3 class="font-bold text-slate-800 text-sm font-display">Proteção Financeira</h3>
-                        <p class="text-xs text-slate-500 leading-normal">
-                            Minimiza vazamentos silenciosos de capital causados por avarias e perdas físicas recorrentes.
-                        </p>
-                    </div>
-
-                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-2">
-                        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center font-bold text-lg">
-                            <i class="fa-solid fa-boxes-stacked"></i>
-                        </div>
-                        <h3 class="font-bold text-slate-800 text-sm font-display">Confiabilidade WMS</h3>
-                        <p class="text-xs text-slate-500 leading-normal">
-                            Garante a paridade exata entre o estoque contábil do sistema e a realidade física no galpão.
-                        </p>
-                    </div>
-
-                    <div class="bg-slate-50 p-5 rounded-2xl border border-slate-100 space-y-2">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold text-lg">
-                            <i class="fa-solid fa-face-smile"></i>
-                        </div>
-                        <h3 class="font-bold text-slate-800 text-sm font-display">Satisfação do Cliente</h3>
-                        <p class="text-xs text-slate-500 leading-normal">
-                            Assegura entregas em perfeito estado, reforçando o valor de marca frente aos parceiros comerciais.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Highlight Box Canva Style -->
-                <div class="bg-slate-900 text-white rounded-2xl p-6 relative overflow-hidden">
-                    <div class="relative z-10 space-y-2">
-                        <span class="text-amber-400 font-bold text-xs uppercase tracking-wider font-display">Diretriz Administrativa</span>
-                        <h4 class="text-base font-bold">O papel do Assistente Administrativo</h4>
-                        <p class="text-xs text-slate-300 leading-relaxed">
-                            Compete ao profissional administrativo estruturar auditorias, documentar discrepâncias e converter falhas operacionais em indicadores acionáveis para a tomada de decisão da gestão.
-                        </p>
-                    </div>
+                <div class="p-4 bg-red-950/40 border-l-4 border-red-600 text-red-300 text-sm">
+                    <strong>AVISO DE SEGURANÇA:</strong> Quaisquer ruídos metálicos, passos em dutos de ventilação ou brinquedos fora do lugar devem ser ignorados e comunicados imediatamente ao Setor de Inovação.
                 </div>
             </div>
+        </section>
 
-            <!-- Page Footer -->
-            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
-                <span>Alejandro Cruz • Assistente Administrativo</span>
-                <span>Página 02</span>
-            </footer>
-        </article>
-
-        <!-- ==================== PÁGINA 3: CONCEITUAÇÃO ==================== -->
-        <article id="p3" class="a4-page justify-between">
-            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
-                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 02</span>
-            </header>
-
-            <div class="my-auto space-y-6">
-                <div class="border-l-4 border-terracotta-500 pl-4 py-1">
-                    <h2 class="text-2xl font-bold text-slate-900 font-display">Diferenciação Técnica de Inconformidades</h2>
-                    <p class="text-xs text-slate-500 font-medium">Distinção clara entre perdas, quebras, faltas e avarias para o correto registro fiscal/operacional.</p>
-                </div>
-
-                <!-- 2x2 Clean Grid -->
-                <div class="grid grid-cols-2 gap-4">
-                    <!-- Card Avaria -->
-                    <div class="p-5 border border-slate-200 rounded-2xl bg-white shadow-sm space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs font-extrabold uppercase text-rose-600 bg-rose-50 px-2.5 py-1 rounded-md">Dano Estrutural</span>
-                            <i class="fa-solid fa-box-open text-rose-500"></i>
-                        </div>
-                        <h3 class="font-bold text-slate-900 text-base font-display">Avaria</h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            Dano físico, parcial ou visível, sofrido pelo material ou sua embalagem durante o manuseio, transporte ou armazenagem.
-                        </p>
-                        <div class="bg-slate-50 p-2.5 rounded-lg text-[11px] text-slate-500 border border-slate-100">
-                            <strong>Exemplo:</strong> Caixas rasgadas, latas amassadas, sacos perfurados no descarregamento.
-                        </div>
-                    </div>
-
-                    <!-- Card Falta -->
-                    <div class="p-5 border border-slate-200 rounded-2xl bg-white shadow-sm space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs font-extrabold uppercase text-amber-600 bg-amber-50 px-2.5 py-1 rounded-md">Divergência Quantitativa</span>
-                            <i class="fa-solid fa-calculator text-amber-500"></i>
-                        </div>
-                        <h3 class="font-bold text-slate-900 text-base font-display">Falta / Extravio</h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            Inconsistência na qual a contagem física resulta em quantidade inferior à constante na Nota Fiscal ou no manifesto.
-                        </p>
-                        <div class="bg-slate-50 p-2.5 rounded-lg text-[11px] text-slate-500 border border-slate-100">
-                            <strong>Exemplo:</strong> Recebimento de 90 volumes para uma nota fiscal que especifica 100 volumes.
-                        </div>
-                    </div>
-
-                    <!-- Card Quebra -->
-                    <div class="p-5 border border-slate-200 rounded-2xl bg-white shadow-sm space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs font-extrabold uppercase text-purple-600 bg-purple-50 px-2.5 py-1 rounded-md">Perda Irrecuperável</span>
-                            <i class="fa-solid fa-wine-bottle text-purple-500"></i>
-                        </div>
-                        <h3 class="font-bold text-slate-900 text-base font-display">Quebra</h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            Destruição total do item que inviabiliza completamente qualquer reaproveitamento comercial ou reparo técnico.
-                        </p>
-                        <div class="bg-slate-50 p-2.5 rounded-lg text-[11px] text-slate-500 border border-slate-100">
-                            <strong>Exemplo:</strong> Queda de palete com garrafas de vidro de azeite resultando em perda integral do lote.
-                        </div>
-                    </div>
-
-                    <!-- Card Perda Geral -->
-                    <div class="p-5 border border-slate-200 rounded-2xl bg-white shadow-sm space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-xs font-extrabold uppercase text-slate-600 bg-slate-100 px-2.5 py-1 rounded-md">Conceito Amplo</span>
-                            <i class="fa-solid fa-chart-pie text-slate-600"></i>
-                        </div>
-                        <h3 class="font-bold text-slate-900 text-base font-display">Perda Operacional</h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            Redução do valor financeiro do estoque ativo gerada por vencimento de validade, obsolescência ou furto.
-                        </p>
-                        <div class="bg-slate-50 p-2.5 rounded-lg text-[11px] text-slate-500 border border-slate-100">
-                            <strong>Exemplo:</strong> Lotes de perecíveis vencidos por descarte devido ao não cumprimento do FEFO.
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
-                <span>Alejandro Cruz • Assistente Administrativo</span>
-                <span>Página 03</span>
-            </footer>
-        </article>
-
-        <!-- ==================== PÁGINA 4: CAUSAS RAIZ ==================== -->
-        <article id="p4" class="a4-page justify-between">
-            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
-                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 03</span>
-            </header>
-
-            <div class="my-auto space-y-6">
-                <div class="border-l-4 border-royal-500 pl-4 py-1">
-                    <h2 class="text-2xl font-bold text-slate-900 font-display">Análise das Principais Causas de Avarias</h2>
-                    <p class="text-xs text-slate-500 font-medium">Mapeamento de vulnerabilidades operacionais ao longo do fluxo logístico.</p>
-                </div>
-
-                <!-- Structured Canva Table -->
-                <div class="overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
-                    <table class="w-full text-left text-xs border-collapse">
-                        <thead>
-                            <tr class="bg-slate-900 text-white font-display">
-                                <th class="p-3.5">Fase Logística</th>
-                                <th class="p-3.5">Causa Raiz Identificada</th>
-                                <th class="p-3.5">Efeito no Material</th>
-                                <th class="p-3.5">Nível de Risco</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100 bg-white font-medium text-slate-700">
-                            <tr>
-                                <td class="p-3.5 font-bold text-slate-900">Transporte Extradoc</td>
-                                <td class="p-3.5">Frenagens bruscas e falta de peação/amarração.</td>
-                                <td class="p-3.5">Tombamento de paletes e esmagamento lateral.</td>
-                                <td class="p-3.5"><span class="bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded text-[10px]">CRÍTICO</span></td>
-                            </tr>
-                            <tr>
-                                <td class="p-3.5 font-bold text-slate-900">Armazenamento</td>
-                                <td class="p-3.5">Empilhamento acima do limite de resistência (lastro).</td>
-                                <td class="p-3.5">Deformação das caixas da base do palete.</td>
-                                <td class="p-3.5"><span class="bg-rose-100 text-rose-700 font-bold px-2 py-0.5 rounded text-[10px]">CRÍTICO</span></td>
-                            </tr>
-                            <tr>
-                                <td class="p-3.5 font-bold text-slate-900">Movimentação Interna</td>
-                                <td class="p-3.5">Operação inadequada de empilhadeiras/paleteiras.</td>
-                                <td class="p-3.5">Perfuração de embalagens pelos garfos do equipamento.</td>
-                                <td class="p-3.5"><span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded text-[10px]">MÉDIO</span></td>
-                            </tr>
-                            <tr>
-                                <td class="p-3.5 font-bold text-slate-900">Recebimento</td>
-                                <td class="p-3.5">Conferência apressada sem inspeção de amostragem.</td>
-                                <td class="p-3.5">Aceite de mercadorias que já chegaram avariadas.</td>
-                                <td class="p-3.5"><span class="bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded text-[10px]">MÉDIO</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Image Showcase Canva Style -->
-                <div class="grid grid-cols-2 gap-4 pt-2">
-                    <div class="rounded-2xl overflow-hidden relative shadow-sm border border-slate-200 h-40">
-                        <img src="https://images.unsplash.com/photo-1578575437130-527eed3abbec?auto=format&fit=crop&w=800&q=80" alt="Incorrect Stacking" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-slate-900/40 flex items-end p-3">
-                            <span class="text-white text-[11px] font-medium">Falha de contenção em paletização</span>
-                        </div>
-                    </div>
-                    <div class="rounded-2xl overflow-hidden relative shadow-sm border border-slate-200 h-40">
-                        <img src="https://images.unsplash.com/photo-1601584115197-04ecc0da31d7?auto=format&fit=crop&w=800&q=80" alt="Forklift Operation" class="w-full h-full object-cover">
-                        <div class="absolute inset-0 bg-slate-900/40 flex items-end p-3">
-                            <span class="text-white text-[11px] font-medium">Risco operacional em movimentação com empilhadeira</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
-                <span>Alejandro Cruz • Assistente Administrativo</span>
-                <span>Página 04</span>
-            </footer>
-        </article>
-
-        <!-- ==================== PÁGINA 5: IDENTIFICAÇÃO ==================== -->
-        <article id="p5" class="a4-page justify-between">
-            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
-                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 04</span>
-            </header>
-
-            <div class="my-auto space-y-6">
-                <div class="border-l-4 border-terracotta-500 pl-4 py-1">
-                    <h2 class="text-2xl font-bold text-slate-900 font-display">Processo de Identificação e Conferência</h2>
-                    <p class="text-xs text-slate-500 font-medium">Procedimento Operacional Padrão (POP) para o recebimento de materiais.</p>
-                </div>
-
-                <!-- Steps Horizontal Process Canva Style -->
+        <!-- GERADOR DE CRACHÁ DO FUNCIONÁRIO (INTERATIVO) -->
+        <section class="bg-zinc-900/90 p-6 rounded-lg border-2 border-yellow-500 shadow-xl">
+            <h3 class="text-xl font-bold text-yellow-400 mb-4 font-mono flex items-center gap-2">
+                <span>🪪</span> CRACHÁ OFICIAL DE IDENTIFICAÇÃO
+            </h3>
+            <div class="grid md:grid-cols-2 gap-6 items-center">
                 <div class="space-y-4">
-                    <div class="flex items-start space-x-4 p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                        <div class="w-10 h-10 rounded-xl bg-slate-900 text-white font-bold flex items-center justify-center flex-shrink-0 font-display">
-                            01
-                        </div>
-                        <div class="space-y-1">
-                            <h3 class="font-bold text-slate-900 text-sm font-display">Inspeção Visual Externa das Docas</h3>
-                            <p class="text-xs text-slate-600 leading-relaxed">
-                                Avaliar o estado do veículo transportador no momento da abertura do furgão. Observar sinais de umidade no assoalho, odores atípicos ou cargas visivelmente tombadas.
-                            </p>
-                        </div>
+                    <p class="text-xs text-gray-300">Digite seus dados para emitir sua credencial temporária de acesso às instalações da Playtime Co.</p>
+                    <div>
+                        <label class="block text-xs text-yellow-500 mb-1">NOME DO FUNCIONÁRIO:</label>
+                        <input type="text" id="badge-name-input" placeholder="Ex: John Doe" oninput="updateBadge()" class="w-full bg-black border border-yellow-600 text-yellow-400 p-2 rounded text-sm focus:outline-none focus:border-red-500 font-mono">
                     </div>
-
-                    <div class="flex items-start space-x-4 p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                        <div class="w-10 h-10 rounded-xl bg-royal-600 text-white font-bold flex items-center justify-center flex-shrink-0 font-display">
-                            02
-                        </div>
-                        <div class="space-y-1">
-                            <h3 class="font-bold text-slate-900 text-sm font-display">Conferência Cega por Amostragem</h3>
-                            <p class="text-xs text-slate-600 leading-relaxed">
-                                Executar a contagem física sem acesso prévio à nota fiscal e abrir percentual normatizado de caixas fechadas para verificar a integridade da embalagem primária.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-start space-x-4 p-4 bg-slate-50 rounded-2xl border border-slate-200">
-                        <div class="w-10 h-10 rounded-xl bg-terracotta-500 text-white font-bold flex items-center justify-center flex-shrink-0 font-display">
-                            03
-                        </div>
-                        <div class="space-y-1">
-                            <h3 class="font-bold text-slate-900 text-sm font-display">Segregação & Identificação Visual</h3>
-                            <p class="text-xs text-slate-600 leading-relaxed">
-                                Separar imediatamente qualquer item defeituoso, aplicando a etiqueta amarela de alerta e impedindo sua entrada na área de armazenagem padrão.
-                            </p>
-                        </div>
+                    <div>
+                        <label class="block text-xs text-yellow-500 mb-1">SETOR / CARGO:</label>
+                        <select id="badge-role-input" onchange="updateBadge()" class="w-full bg-black border border-yellow-600 text-yellow-400 p-2 rounded text-sm focus:outline-none focus:border-red-500 font-mono">
+                            <option value="Operador do GrabPack">Operador do GrabPack</option>
+                            <option value="Técnico de Manutenção Noturna">Técnico de Manutenção Noturna</option>
+                            <option value="Assistente do Setor de Inovação">Assistente do Setor de Inovação</option>
+                            <option value="Supervisor de Testes Biológicos">Supervisor de Testes Biológicos</option>
+                        </select>
                     </div>
                 </div>
 
-                <!-- Callout Box -->
-                <div class="p-4 bg-amber-50 border-l-4 border-amber-500 rounded-r-xl space-y-1">
-                    <h4 class="font-bold text-amber-900 text-xs font-display flex items-center">
-                        <i class="fa-solid fa-triangle-exclamation mr-2"></i> Importância da Ressalva no CTe
-                    </h4>
-                    <p class="text-xs text-amber-800 leading-relaxed">
-                        Qualquer irregularidade notada durante o descarregamento DEVE ser anotada no verso do Conhecimento de Transporte Eletrônico (CTe) antes de assinar o canhoto de recebimento.
-                    </p>
-                </div>
-            </div>
-
-            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
-                <span>Alejandro Cruz • Assistente Administrativo</span>
-                <span>Página 05</span>
-            </footer>
-        </article>
-
-        <!-- ==================== PÁGINA 6: FICHA DE OCORRÊNCIA ==================== -->
-        <article id="p6" class="a4-page justify-between">
-            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
-                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 05</span>
-            </header>
-
-            <div class="my-auto space-y-4">
-                <div class="border-l-4 border-royal-500 pl-4 py-1">
-                    <h2 class="text-xl font-bold text-slate-900 font-display">Registro da Ocorrência e Documentação</h2>
-                    <p class="text-xs text-slate-500 font-medium">Modelo oficial de Ficha de Ocorrência de Avarias preenchido.</p>
-                </div>
-
-                <!-- Formal Document Canvas Style -->
-                <div class="bg-slate-50 border-2 border-slate-200 rounded-2xl p-6 space-y-4 shadow-sm text-xs">
-                    <div class="flex justify-between items-center border-b border-slate-200 pb-3">
-                        <div>
-                            <span class="font-black text-slate-900 font-display text-sm block">FICHA DE REGISTRO DE AVARIA (FRA)</span>
-                            <span class="text-[10px] text-slate-500">Unidade Operacional Sarandi PR</span>
+                <!-- Crachá Visual Renderizado em SVG -->
+                <div class="flex justify-center">
+                    <div id="badge-card" class="w-72 h-44 bg-zinc-950 border-4 border-yellow-500 rounded-lg p-3 shadow-2xl relative flex flex-col justify-between">
+                        <div class="flex justify-between items-center border-b border-yellow-600/50 pb-2">
+                            <span class="text-[10px] text-yellow-400 font-bold tracking-widest">PLAYTIME CO. SECURITY</span>
+                            <span class="w-3 h-3 rounded-full bg-red-600 animate-pulse"></span>
                         </div>
-                        <span class="font-mono bg-slate-900 text-amber-400 font-bold px-3 py-1 rounded-md">Nº 2026-089</span>
-                    </div>
-
-                    <!-- Metadata Grid -->
-                    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 bg-white p-3 rounded-xl border border-slate-200">
-                        <div>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Data/Hora</span>
-                            <span class="font-bold text-slate-800">05/10/2026 - 14:30</span>
+                        <div class="flex gap-3 items-center my-2">
+                            <!-- Avatar Silhueta SVG -->
+                            <svg class="w-14 h-14 bg-zinc-900 rounded border border-zinc-700" viewBox="0 0 100 100">
+                                <circle cx="50" cy="35" r="22" fill="#4b5563"/>
+                                <path d="M 15 90 C 15 60, 85 60, 85 90 Z" fill="#4b5563"/>
+                            </svg>
+                            <div>
+                                <h4 id="badge-name" class="text-sm font-bold text-white uppercase font-mono tracking-wider">SEU NOME</h4>
+                                <p id="badge-role" class="text-[10px] text-yellow-400 font-mono">Operador do GrabPack</p>
+                                <p class="text-[9px] text-gray-500 font-mono mt-1">ID: #8942-PTC</p>
+                            </div>
                         </div>
-                        <div>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Setor/Docas</span>
-                            <span class="font-bold text-slate-800">Doca 02 (Recebimento)</span>
-                        </div>
-                        <div>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Responsável</span>
-                            <span class="font-bold text-royal-600">Alejandro Cruz</span>
-                        </div>
-                    </div>
-
-                    <!-- Product Specs Table -->
-                    <table class="w-full text-left border-collapse bg-white rounded-xl overflow-hidden border border-slate-200">
-                        <thead class="bg-slate-100 text-slate-700 font-bold">
-                            <tr>
-                                <th class="p-2 border-b">Código/SKU</th>
-                                <th class="p-2 border-b">Descrição do Produto</th>
-                                <th class="p-2 border-b">Qtd. Total</th>
-                                <th class="p-2 border-b">Qtd. Avariada</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-slate-700">
-                            <tr>
-                                <td class="p-2 font-mono">SKU-8841-B</td>
-                                <td class="p-2 font-bold">Detergente Industrial 5L (Caixa c/ 4)</td>
-                                <td class="p-2">120 caixas</td>
-                                <td class="p-2 text-rose-600 font-bold">14 caixas</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <!-- Incident Details -->
-                    <div class="space-y-2 bg-white p-3 rounded-xl border border-slate-200">
-                        <div>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Descrição da Inconformidade</span>
-                            <p class="text-slate-700 leading-snug">
-                                Caixa de papelão inferior totalmente deformada por vazamento em galão de plástico rompido por atrito no transporte.
-                            </p>
-                        </div>
-                        <div>
-                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Ação Imediata Executada</span>
-                            <p class="text-slate-700 leading-snug">
-                                Isolamento na Área Vermelha de Quarentena, emissão do termo de devolução parcial ao motorista da transportadora.
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Approval Signatures Grid -->
-                    <div class="pt-4 grid grid-cols-2 gap-6 text-center border-t border-slate-200">
-                        <div class="border-t border-slate-300 pt-1">
-                            <span class="font-bold text-slate-800 block text-[11px]">Alejandro Cruz</span>
-                            <span class="text-[9px] text-slate-400 uppercase">Aprendiz / Assistente Adm.</span>
-                        </div>
-                        <div class="border-t border-slate-300 pt-1">
-                            <span class="font-bold text-slate-800 block text-[11px]">Fernando de Paula</span>
-                            <span class="text-[9px] text-slate-400 uppercase">Instrutor / Supervisor</span>
+                        <div class="bg-red-950/80 border border-red-600 p-1 rounded text-center">
+                            <span class="text-[9px] text-red-300 font-bold tracking-widest uppercase">NÍVEL DE ACESSO: RESTRITO 3</span>
                         </div>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
-                <span>Alejandro Cruz • Assistente Administrativo</span>
-                <span>Página 06</span>
-            </footer>
-        </article>
-
-        <!-- ==================== PÁGINA 7: CONTENÇÃO ==================== -->
-        <article id="p7" class="a4-page justify-between">
-            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
-                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 06</span>
-            </header>
-
-            <div class="my-auto space-y-6">
-                <div class="border-l-4 border-terracotta-500 pl-4 py-1">
-                    <h2 class="text-2xl font-bold text-slate-900 font-display">Procedimentos de Contenção & Quarentena</h2>
-                    <p class="text-xs text-slate-500 font-medium">Medidas para conter a contaminação do estoque bom e destinação segura.</p>
-                </div>
-
-                <div class="grid grid-cols-2 gap-4">
-                    <!-- Isolation Box -->
-                    <div class="bg-rose-50 border border-rose-200 rounded-2xl p-5 space-y-2">
-                        <div class="w-10 h-10 rounded-xl bg-rose-500 text-white flex items-center justify-center font-bold">
-                            <i class="fa-solid fa-lock"></i>
-                        </div>
-                        <h3 class="font-bold text-slate-900 text-sm font-display">Isolamento em Gaiola Fechada</h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            Todos os itens retidos em avaria devem ser armazenados em gaiolas físicas trancadas ("Área Vermelha"), com controle estrito de chave sob custódia da administração.
-                        </p>
-                    </div>
-
-                    <!-- System Block -->
-                    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 space-y-2">
-                        <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-900 flex items-center justify-center font-bold">
-                            <i class="fa-solid fa-ban"></i>
-                        </div>
-                        <h3 class="font-bold text-slate-900 text-sm font-display">Bloqueio Sistêmico WMS</h3>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            O saldo físico avariado deve ser alterado no sistema ERP/WMS para a condição de "Inativo / Em Análise", impossibilitando sua liberação para picking ou venda.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Warning Banner Canva Style -->
-                <div class="bg-slate-900 text-white p-6 rounded-2xl space-y-3 relative overflow-hidden">
-                    <div class="flex items-center space-x-3 text-terracotta-500">
-                        <i class="fa-solid fa-shield-cat text-2xl"></i>
-                        <h3 class="font-bold font-display text-sm text-white">Proibição de Comercialização</h3>
-                    </div>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        É expressamente proibido colocar em circulação produtos com embalagens violadas ou amassadas, sob risco de sanções do Procon, Vigilância Sanitária e perda irreversível de reputação corporativa.
-                    </p>
-                </div>
-            </div>
-
-            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
-                <span>Alejandro Cruz • Assistente Administrativo</span>
-                <span>Página 07</span>
-            </footer>
-        </article>
-
-        <!-- ==================== PÁGINA 8: GESTÃO PREVENTIVA ==================== -->
-        <article id="p8" class="a4-page justify-between">
-            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
-                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 07</span>
-            </header>
-
-            <div class="my-auto space-y-6">
-                <div class="border-l-4 border-royal-500 pl-4 py-1">
-                    <h2 class="text-2xl font-bold text-slate-900 font-display">Gestão Preventiva & Boas Práticas</h2>
-                    <p class="text-xs text-slate-500 font-medium">Adoção de métodos organizacionais para mitigar quebras e avarias.</p>
-                </div>
-
-                <!-- 2-Column Grid with Icons -->
-                <div class="grid grid-cols-2 gap-4">
-                    <div class="p-4 border border-slate-200 rounded-2xl bg-white space-y-2">
-                        <div class="flex items-center space-x-2 text-royal-600 font-bold text-xs font-display">
-                            <i class="fa-solid fa-broom text-amber-500"></i>
-                            <span>Programa 5S</span>
-                        </div>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            Manter corredores livres de entulhos, caixas rasgadas e pallets danificados que possam provocar acidentes com equipamentos.
-                        </p>
-                    </div>
-
-                    <div class="p-4 border border-slate-200 rounded-2xl bg-white space-y-2">
-                        <div class="flex items-center space-x-2 text-royal-600 font-bold text-xs font-display">
-                            <i class="fa-solid fa-rotate text-amber-500"></i>
-                            <span>Regra PEPS / FIFO</span>
-                        </div>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            Primeiro que Entra, Primeiro que Sai. Garante o giro correto dos lotes mais antigos, prevenindo a perda por prazo de validade.
-                        </p>
-                    </div>
-
-                    <div class="p-4 border border-slate-200 rounded-2xl bg-white space-y-2">
-                        <div class="flex items-center space-x-2 text-royal-600 font-bold text-xs font-display">
-                            <i class="fa-solid fa-graduation-cap text-amber-500"></i>
-                            <span>Treinamento de Equipe</span>
-                        </div>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            Reciclagem contínua dos operadores de empilhadeira em técnicas seguras de movimentação e peação de cargas em paletes.
-                        </p>
-                    </div>
-
-                    <div class="p-4 border border-slate-200 rounded-2xl bg-white space-y-2">
-                        <div class="flex items-center space-x-2 text-royal-600 font-bold text-xs font-display">
-                            <i class="fa-solid fa-screwdriver-wrench text-amber-500"></i>
-                            <span>Manutenção Preditiva</span>
-                        </div>
-                        <p class="text-xs text-slate-600 leading-relaxed">
-                            Revisão periódica das estruturas de porta-paletes para evitar colapsos mecânicos nas áreas de alta verticalização.
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Unsplash Banner -->
-                <div class="rounded-2xl overflow-hidden h-36 relative border border-slate-200">
-                    <img src="https://images.unsplash.com/photo-1580674684081-7617fbf3d745?auto=format&fit=crop&w=1000&q=80" alt="Organized Warehouse" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-r from-slate-900/80 to-transparent flex items-center p-6">
-                        <span class="text-white text-xs font-medium max-w-xs">A excelência na organização visual reduz em até 45% o índice de avarias internas.</span>
-                    </div>
-                </div>
-            </div>
-
-            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
-                <span>Alejandro Cruz • Assistente Administrativo</span>
-                <span>Página 08</span>
-            </footer>
-        </article>
-
-        <!-- ==================== PÁGINA 9: PLANO DE AÇÃO ==================== -->
-        <article id="p9" class="a4-page justify-between">
-            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
-                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 08</span>
-            </header>
-
-            <div class="my-auto space-y-6">
-                <div class="border-l-4 border-terracotta-500 pl-4 py-1">
-                    <h2 class="text-2xl font-bold text-slate-900 font-display">Plano de Ação Corretivo (5W2H)</h2>
-                    <p class="text-xs text-slate-500 font-medium">Metodologia estruturada para redução de custos decorrentes de avarias em Sarandi PR.</p>
-                </div>
-
-                <!-- 5W2H Table Canva Style -->
-                <div class="overflow-hidden rounded-2xl border border-slate-200 shadow-sm text-xs">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="bg-slate-900 text-white font-display">
-                                <th class="p-3">O que? (What)</th>
-                                <th class="p-3">Por quê? (Why)</th>
-                                <th class="p-3">Quem? (Who)</th>
-                                <th class="p-3">Como? (How)</th>
-                                <th class="p-3">Prazo</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100 bg-white font-medium text-slate-700">
-                            <tr>
-                                <td class="p-3 font-bold text-slate-900">Instalação de cantoneiras nas cargas</td>
-                                <td class="p-3">Evitar o esmagamento das caixas nas bordas dos paletes.</td>
-                                <td class="p-3 font-semibold text-royal-600">Equipe de Expedição</td>
-                                <td class="p-3">Fixação de cantoneiras de papelão rígido antes de passar o filme stretch.</td>
-                                <td class="p-3 font-mono font-bold">Imediato</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-bold text-slate-900">Treinamento de Empilhadeiristas</td>
-                                <td class="p-3">Reduzir perfurações de sacarias e embalagens plásticas.</td>
-                                <td class="p-3 font-semibold text-royal-600">Fernando de Paula</td>
-                                <td class="p-3">Workshop prático sobre manuseio seguro e limites de carga.</td>
-                                <td class="p-3 font-mono font-bold">15 dias</td>
-                            </tr>
-                            <tr>
-                                <td class="p-3 font-bold text-slate-900">Auditoria Mensal de Acuracidade</td>
-                                <td class="p-3">Identificar gargalos em tempo real e ajustar o WMS.</td>
-                                <td class="p-3 font-semibold text-royal-600">Alejandro Cruz</td>
-                                <td class="p-3">Inventários rotativos por amostragem nas áreas críticas.</td>
-                                <td class="p-3 font-mono font-bold">Mensal</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Target Indicators Box -->
-                <div class="grid grid-cols-3 gap-4 text-center">
-                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
-                        <span class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Meta de Redução</span>
-                        <span class="text-2xl font-black text-emerald-600 font-display">- 35%</span>
-                        <span class="text-[10px] text-slate-500 block mt-1">no primeiro trimestre</span>
-                    </div>
-                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
-                        <span class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Acuracidade Meta</span>
-                        <span class="text-2xl font-black text-royal-600 font-display">99.2%</span>
-                        <span class="text-[10px] text-slate-500 block mt-1">estoque físico x sistema</span>
-                    </div>
-                    <div class="p-4 bg-slate-50 border border-slate-200 rounded-2xl">
-                        <span class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Retorno (ROI)</span>
-                        <span class="text-2xl font-black text-terracotta-500 font-display">R$ 18k</span>
-                        <span class="text-[10px] text-slate-500 block mt-1">economia estimada/ano</span>
-                    </div>
-                </div>
-            </div>
-
-            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
-                <span>Alejandro Cruz • Assistente Administrativo</span>
-                <span>Página 09</span>
-            </footer>
-        </article>
-
-        <!-- ==================== PÁGINA 10: CONCLUSÃO ==================== -->
-        <article id="p10" class="a4-page justify-between">
-            <header class="flex justify-between items-center border-b border-slate-200 pb-3">
-                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest font-display">Relatório Técnico • PROMEC</span>
-                <span class="text-xs font-bold text-terracotta-500 font-mono">SEÇÃO 09</span>
-            </header>
-
-            <div class="my-auto space-y-6">
-                <div class="border-l-4 border-royal-500 pl-4 py-1">
-                    <h2 class="text-2xl font-bold text-slate-900 font-display">Conclusão & Referências Bibliográficas</h2>
-                    <p class="text-xs text-slate-500 font-medium">Sintese das considerações finais do aprendiz e fontes consultadas.</p>
-                </div>
-
-                <!-- Learner Statement Box -->
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 space-y-3">
-                    <h3 class="font-bold text-slate-900 text-sm font-display flex items-center text-royal-600">
-                        <i class="fa-solid fa-quote-left mr-2"></i> Considerações Finais do Aprendiz
+        <!-- Seção 1: Apresentação da Empresa -->
+        <section class="grid md:grid-cols-2 gap-6">
+            <div class="bg-zinc-900/80 p-6 rounded-lg playtime-border-red flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-red-500 mb-3 flex items-center gap-2">
+                        <span>1.</span> Apresentação da Empresa
                     </h3>
-                    <p class="text-xs text-slate-600 leading-relaxed italic">
-                        "A confecção deste relatório permitiu consolidar a visão prática de que o controle de avarias não é um custo inevitável do processo, mas sim uma falha de gestão passível de eliminação. A atuação proativa do Assistente Administrativo no registro, comunicação rápida e implementação de planos de ação transforma o ambiente operacional da PROMEC em um modelo mais seguro, rentável e eficiente."
+                    <p class="text-sm text-gray-300 mb-4 leading-relaxed">
+                        Fundada por Elliot Ludwig em 1930, a Playtime Co. revolucionou a indústria com brinquedos vivos e interativos como Huggy Wuggy, Mommy Long Legs e Poppy. Nossa fábrica não é apenas um local de trabalho, é um ecossistema vivo autossustentável.
                     </p>
-                    <span class="text-xs font-bold text-slate-800 block text-right font-display">— Alejandro Cruz, Sarandi PR 2026</span>
                 </div>
+                <!-- SVG Ilustrativo da Fábrica -->
+                <div class="p-3 bg-black/60 rounded border border-zinc-800 flex justify-center">
+                    <svg class="w-full h-24" viewBox="0 0 400 100">
+                        <path d="M 20 90 L 20 40 L 60 60 L 60 40 L 100 60 L 100 30 L 180 30 L 180 90 Z" fill="#1e293b" stroke="#dc2626" stroke-width="2"/>
+                        <rect x="190" y="20" width="30" height="70" fill="#0f172a" stroke="#dc2626" stroke-width="2"/>
+                        <rect x="230" y="10" width="40" height="80" fill="#0f172a" stroke="#dc2626" stroke-width="2"/>
+                        <line x1="10" y1="90" x2="390" y2="90" stroke="#facc15" stroke-width="3"/>
+                        <text x="200" y="80" fill="#ef4444" font-family="'Share Tech Mono'" font-size="12" text-anchor="middle">SISTEMA FÁBRICA MAIN HUB</text>
+                    </svg>
+                </div>
+            </div>
 
-                <!-- Academic References -->
-                <div class="space-y-3 pt-2">
-                    <h3 class="font-bold text-slate-900 text-xs uppercase tracking-wider font-display">Referências Bibliográficas</h3>
-                    <ul class="space-y-2 text-xs text-slate-600">
-                        <li class="flex items-start space-x-2">
-                            <span class="text-terracotta-500 font-bold">•</span>
-                            <span><strong>BALLOU, Ronald H.</strong> Gerenciamento da Cadeia de Suprimentos / Logística Empresarial. 5ª Edição. Porto Alegre: Bookman, 2006.</span>
-                        </li>
-                        <li class="flex items-start space-x-2">
-                            <span class="text-terracotta-500 font-bold">•</span>
-                            <span><strong>VIANA, João José.</strong> Administração de Materiais: Um Enfoque Prático. São Paulo: Atlas, 2010.</span>
-                        </li>
-                        <li class="flex items-start space-x-2">
-                            <span class="text-terracotta-500 font-bold">•</span>
-                            <span><strong>PROMEC Sarandi.</strong> Apostila de Operações de Almoxarifado e Rotinas Administrativas. Sarandi - PR, 2026.</span>
-                        </li>
+            <!-- Seção 2: Regras de Convivência -->
+            <div class="bg-zinc-900/80 p-6 rounded-lg playtime-border-blue flex flex-col justify-between">
+                <div>
+                    <h3 class="text-xl font-bold text-blue-400 mb-3 flex items-center gap-2">
+                        <span>2.</span> Regras de Convivência
+                    </h3>
+                    <ul class="text-sm text-gray-300 space-y-2 list-disc list-inside">
+                        <li>Nunca olhe diretamente para os protótipos em fase de testes.</li>
+                        <li>Trate seus colegas com respeito, especialmente se eles parecerem <span class="censored">[ANORMALMENTE PÁLIDOS E SEM EXPRESSÃO]</span>.</li>
+                        <li>Caso veja Huggy Wuggy fora do seu pedestal no saguão, <span class="censored">[NÃO CORRA. ELE SENTE A SUA RESPIRAÇÃO]</span>.</li>
+                        <li>Não alimente ou interaja com as criações fora das sessões autorizadas.</li>
                     </ul>
                 </div>
+                <div class="mt-4 text-xs text-blue-400 italic">
+                    * Passe o mouse/toque nas faixas pretas para revelar dados confidenciais.
+                </div>
+            </div>
+        </section>
+
+        <!-- FITAS VHS INTERATIVAS (RECURSO VISUAL) -->
+        <section class="bg-zinc-950 p-6 rounded-lg playtime-border-yellow">
+            <h3 class="text-xl font-bold text-yellow-400 mb-4 font-mono flex items-center gap-2">
+                <span>📼</span> FITAS CASSETE DE TREINAMENTO (VHS)
+            </h3>
+            <p class="text-xs text-gray-400 mb-4">Clique nas fitas de instrução para escutar e reproduzir as gravações oficiais de segurança.</p>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <!-- Fita Azul (GrabPack) -->
+                <div onclick="playTape('blue')" class="cursor-pointer bg-zinc-900 hover:bg-zinc-800 p-4 rounded-lg border-2 border-blue-600 transition flex items-center gap-4">
+                    <svg class="w-20 h-16 shrink-0" viewBox="0 0 120 80">
+                        <rect x="5" y="5" width="110" height="70" rx="5" fill="#1e1e24" stroke="#2563eb" stroke-width="3"/>
+                        <rect x="20" y="20" width="80" height="25" fill="#000" rx="3"/>
+                        <circle cx="40" cy="32" r="8" fill="#2563eb"/>
+                        <circle cx="80" cy="32" r="8" fill="#2563eb"/>
+                        <rect x="25" y="52" width="70" height="15" fill="#3b82f6" rx="2"/>
+                        <text x="60" y="63" fill="#fff" font-size="8" font-family="'Share Tech Mono'" text-anchor="middle">TREINAMENTO GRABPACK</text>
+                    </svg>
+                    <div>
+                        <h4 class="text-blue-400 font-bold text-sm font-mono">FITA AZUL: OPERAÇÃO GRABPACK</h4>
+                        <p class="text-xs text-gray-400 mt-1">Aprenda a conectar os condutores elétricos e manusear as mãos estendidas.</p>
+                    </div>
+                </div>
+
+                <!-- Fita Vermelha (Iniciativa Bigger Bodies) -->
+                <div onclick="playTape('red')" class="cursor-pointer bg-zinc-900 hover:bg-zinc-800 p-4 rounded-lg border-2 border-red-600 transition flex items-center gap-4">
+                    <svg class="w-20 h-16 shrink-0" viewBox="0 0 120 80">
+                        <rect x="5" y="5" width="110" height="70" rx="5" fill="#1e1e24" stroke="#dc2626" stroke-width="3"/>
+                        <rect x="20" y="20" width="80" height="25" fill="#000" rx="3"/>
+                        <circle cx="40" cy="32" r="8" fill="#dc2626"/>
+                        <circle cx="80" cy="32" r="8" fill="#dc2626"/>
+                        <rect x="25" y="52" width="70" height="15" fill="#ef4444" rx="2"/>
+                        <text x="60" y="63" fill="#fff" font-size="8" font-family="'Share Tech Mono'" text-anchor="middle">PROTOCOLO DE EMERGÊNCIA</text>
+                    </svg>
+                    <div>
+                        <h4 class="text-red-400 font-bold text-sm font-mono">FITA VERMELHA: AVISO CONFIDENCIAL</h4>
+                        <p class="text-xs text-gray-400 mt-1">Instruções em caso de fuga de cobaias do Setor de Inovação.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 3 & 4: Horários e Documentos -->
+        <section class="grid md:grid-cols-2 gap-6">
+            <!-- Horários e Frequência -->
+            <div class="bg-zinc-900/80 p-6 rounded-lg border-2 border-zinc-700 hover:border-yellow-500 transition">
+                <h3 class="text-xl font-bold text-yellow-400 mb-3">3. Horários e Frequência</h3>
+                <p class="text-sm text-gray-300 leading-relaxed mb-3">
+                    O turno noturno começa impreterivelmente às 22:00 e encerra-se às 06:00. O registro de ponto é feito via bio-scanner na entrada do Setor de Processamento.
+                </p>
+                <div class="bg-black p-3 rounded text-xs font-mono text-red-400 border border-red-900/50">
+                    ⚠️ Atrasos de mais de 10 minutos resultarão em transferência imediata para a <span class="censored">[ÁREA DE TESTES DE INOVAÇÃO HUMANITÁRIA]</span>.
+                </div>
             </div>
 
-            <footer class="pt-4 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-400 font-semibold uppercase">
-                <span>Alejandro Cruz • Assistente Administrativo</span>
-                <span>Página 10</span>
-            </footer>
-        </article>
+            <!-- Cuidados com Documentos -->
+            <div class="bg-zinc-900/80 p-6 rounded-lg border-2 border-zinc-700 hover:border-red-500 transition">
+                <h3 class="text-xl font-bold text-red-400 mb-3">4. Cuidados com Documentos e Informações</h3>
+                <p class="text-sm text-gray-300 leading-relaxed mb-3">
+                    Todos os relatórios biológicos da "Iniciativa Bigger Bodies" e as fitas VHS (azuis, vermelhas e pretas) contêm segredos industriais estritamente sigilosos.
+                </p>
+                <p class="text-xs text-gray-400">
+                    A remoção de qualquer fita cassete das instalações é punível com o cancelamento imediato de sua ficha de vida.
+                </p>
+            </div>
+        </section>
+
+        <!-- Seção 5 & 6: Segurança e Comunicação -->
+        <section class="grid md:grid-cols-2 gap-6">
+            <!-- Normas de Segurança -->
+            <div class="bg-zinc-900/80 p-6 rounded-lg border-2 border-zinc-700 hover:border-blue-500 transition">
+                <h3 class="text-xl font-bold text-blue-400 mb-3">5. Normas Básicas de Segurança</h3>
+                <ul class="text-sm text-gray-300 space-y-2">
+                    <li class="flex items-start gap-2">
+                        <span class="text-blue-500 font-bold">►</span> Opere o <strong>GrabPack</strong> somente com as duas mãos encaixadas e travadas.
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-blue-500 font-bold">►</span> Mantenha distância de cabos energizados expostos nos corredores escuros.
+                    </li>
+                    <li class="flex items-start gap-2">
+                        <span class="text-blue-500 font-bold">►</span> Salas com portas marcadas pela flor vermelha são <span class="text-red-500 font-bold">PROIBIDAS</span>.
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Comunicação com a Equipe -->
+            <div class="bg-zinc-900/80 p-6 rounded-lg border-2 border-zinc-700 hover:border-yellow-500 transition">
+                <h3 class="text-xl font-bold text-yellow-400 mb-3">6. Comunicação com a Equipe</h3>
+                <p class="text-sm text-gray-300 leading-relaxed mb-3">
+                    A comunicação interna é feita apenas via rádio-interfone de canal fechado da central.
+                </p>
+                <div class="p-3 bg-zinc-950 rounded border border-yellow-600/40 text-xs text-yellow-200">
+                    Caso escute sussurros na frequência de rádio ou a voz da boneca Poppy nos alto-falantes, tranque as portas hidráulicas e aguarde o amanhecer.
+                </div>
+            </div>
+        </section>
+
+        <!-- SEÇÃO CFTV: MONITOR DE CÂMERAS DE SEGURANÇA (CANVAS DINÂMICO) -->
+        <section class="bg-black p-6 rounded-lg playtime-border-red">
+            <h3 class="text-xl font-bold text-red-500 mb-3 font-mono flex items-center justify-between">
+                <span>📹 MONITORAMENTO CFTV EM TEMPO REAL</span>
+                <span class="text-xs text-green-500 animate-pulse">● SINAL AO VIVO</span>
+            </h3>
+            
+            <div class="grid md:grid-cols-4 gap-4">
+                <!-- Seletor de Câmeras -->
+                <div class="space-y-2 flex flex-col justify-center">
+                    <button onclick="switchCamera(1)" id="btn-cam-1" class="w-full bg-zinc-800 hover:bg-zinc-700 text-yellow-400 p-2 rounded text-xs font-mono border-l-4 border-yellow-500 text-left">
+                        CAM 01: SAGUÃO PRINCIPAL
+                    </button>
+                    <button onclick="switchCamera(2)" id="btn-cam-2" class="w-full bg-zinc-900 hover:bg-zinc-700 text-gray-400 p-2 rounded text-xs font-mono border-l-4 border-transparent text-left">
+                        CAM 02: DUTOS DE AR
+                    </button>
+                    <button onclick="switchCamera(3)" id="btn-cam-3" class="w-full bg-zinc-900 hover:bg-zinc-700 text-gray-400 p-2 rounded text-xs font-mono border-l-4 border-transparent text-left">
+                        CAM 03: SALA DA POPPY
+                    </button>
+                </div>
+
+                <!-- Screen do Canvas -->
+                <div class="md:col-span-3 h-64 bg-zinc-950 rounded border-2 border-zinc-800 relative overflow-hidden">
+                    <canvas id="cftvCanvas" class="w-full h-full block"></canvas>
+                    <div class="absolute top-3 left-3 text-red-500 text-xs font-mono bg-black/70 px-2 py-1 rounded border border-red-900" id="cam-title">
+                        CAM 01 - SAGUÃO PRINCIPAL
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Seção 7: Cinco Atitudes Esperadas -->
+        <section class="bg-zinc-950 p-6 rounded-lg playtime-border-yellow">
+            <h3 class="text-2xl font-bold text-yellow-400 mb-6 text-center tracking-wider font-mono">
+                7. As 5 Atitudes Esperadas de um Bom Profissional
+            </h3>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <div class="bg-zinc-900 p-4 rounded text-center border border-zinc-800 hover:border-red-500 transition">
+                    <div class="text-2xl mb-2">👁️</div>
+                    <h4 class="font-bold text-red-400 text-sm mb-1">1. Vigilância</h4>
+                    <p class="text-xs text-gray-400">Esteja atento às sombras e aos movimentos nas tubulações.</p>
+                </div>
+                <div class="bg-zinc-900 p-4 rounded text-center border border-zinc-800 hover:border-blue-500 transition">
+                    <div class="text-2xl mb-2">🤫</div>
+                    <h4 class="font-bold text-blue-400 text-sm mb-1">2. Discrição</h4>
+                    <p class="text-xs text-gray-400">O que você presenciar na fábrica, morre com você.</p>
+                </div>
+                <div class="bg-zinc-900 p-4 rounded text-center border border-zinc-800 hover:border-yellow-500 transition">
+                    <div class="text-2xl mb-2">⚡</div>
+                    <h4 class="font-bold text-yellow-400 text-sm mb-1">3. Agilidade</h4>
+                    <p class="text-xs text-gray-400">Maneje as mãos do GrabPack com extrema precisão.</p>
+                </div>
+                <div class="bg-zinc-900 p-4 rounded text-center border border-zinc-800 hover:border-red-500 transition">
+                    <div class="text-2xl mb-2">🤝</div>
+                    <h4 class="font-bold text-red-400 text-sm mb-1">4. Obediência</h4>
+                    <p class="text-xs text-gray-400">Nunca questione as ordens diretas do Setor de Inovação.</p>
+                </div>
+                <div class="bg-zinc-900 p-4 rounded text-center border border-zinc-800 hover:border-blue-500 transition">
+                    <div class="text-2xl mb-2">🏃</div>
+                    <h4 class="font-bold text-blue-400 text-sm mb-1">5. Sobrevivência</h4>
+                    <p class="text-xs text-gray-400">Saiba a hora exata de abandonar o posto e correr.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- MINI JOGO: TESTE DE REFLEXOS E SOBREVIVÊNCIA COM GRABPACK -->
+        <section class="bg-black p-6 rounded-lg border-4 border-red-600 shadow-2xl relative overflow-hidden">
+            <div class="text-center mb-4">
+                <span class="bg-red-600 text-black px-3 py-1 font-bold text-xs uppercase rounded font-mono">
+                    MÓDULO PRÁTICO DE SEGURANÇA
+                </span>
+                <h3 class="text-3xl font-extrabold text-white mt-2 font-mono glitch-text">
+                    DESAFIO GRABPACK: CAÇA AOS BRINQUEDOS
+                </h3>
+                <p class="text-sm text-gray-400">
+                    Use a <span class="text-blue-500 font-bold">Mão Azul (Clique Esquerdo)</span> e a <span class="text-red-500 font-bold">Mão Vermelha (Clique Direito ou Botão)</span> para capturar os brinquedos seguros antes que o tempo acabe. <br>
+                    <span class="text-red-500 font-bold">⚠️ CUIDADO:</span> NÃO atire no Huggy Wuggy ou em alvos amaldiçoados!
+                </p>
+            </div>
+
+            <!-- Painel do Jogo -->
+            <div class="flex justify-between items-center bg-zinc-900 p-3 rounded mb-4 font-mono text-sm border border-zinc-800">
+                <div id="game-status" class="text-yellow-400 font-bold">Status: AGUARDANDO INÍCIO</div>
+                <div id="game-timer" class="text-red-500 font-bold text-lg">Tempo: 20s</div>
+                <div id="game-score" class="text-blue-400 font-bold text-lg">Pontos: 0 / 10</div>
+            </div>
+
+            <!-- Container do Canvas do Jogo -->
+            <div id="game-container" class="w-full h-[380px] rounded relative overflow-hidden bg-zinc-950 border-2 border-zinc-800 cursor-crosshair">
+                <canvas id="gameCanvas" class="w-full h-full block"></canvas>
+                
+                <!-- Overlay de Tela Inicial / Menu -->
+                <div id="game-overlay" class="absolute inset-0 bg-black/90 flex flex-col items-center justify-center p-6 text-center z-20">
+                    <h4 id="overlay-title" class="text-3xl font-bold text-yellow-400 mb-2 font-mono">TESTE DE HABILIDADE GRABPACK</h4>
+                    <p id="overlay-desc" class="text-sm text-gray-300 mb-6 max-w-md">
+                        Acerte 10 alvos seguros (Brinquedos Azuis/Vermelhos) em menos de 20 segundos. Evite os alvos perigosos!
+                    </p>
+                    <button onclick="startGame()" class="bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg transform hover:scale-105 transition font-mono border-2 border-yellow-400">
+                        ⚡ INICIAR TESTE PRÁTICO
+                    </button>
+                </div>
+
+                <!-- JUMPSCARE TELA CHEIA HUGGY WUGGY (SVG EMBEDDED) -->
+                <div id="jumpscare-overlay" class="hidden absolute inset-0 bg-black z-50 flex flex-col items-center justify-center overflow-hidden jumpscare-shake">
+                    <div class="w-full h-full relative flex items-center justify-center">
+                        <svg viewBox="0 0 500 500" class="w-full h-full max-w-xl max-h-xl filter drop-shadow-[0_0_35px_rgba(255,0,0,0.9)] animate-pulse">
+                            <path d="M 100 80 Q 250 -20 400 80 Q 480 250 400 420 Q 250 480 100 420 Q 20 250 100 80 Z" fill="#0b1b4f" stroke="#1d3f9e" stroke-width="8"/>
+                            <ellipse cx="180" cy="180" rx="45" ry="55" fill="#facc15" stroke="#000" stroke-width="4"/>
+                            <ellipse cx="320" cy="180" rx="45" ry="55" fill="#facc15" stroke="#000" stroke-width="4"/>
+                            <circle cx="180" cy="180" r="18" fill="#dc2626"/>
+                            <circle cx="320" cy="180" r="18" fill="#dc2626"/>
+                            <path d="M 130 280 Q 250 440 370 280 Q 250 240 130 280 Z" fill="#450a0a" stroke="#b91c1c" stroke-width="6"/>
+                            <!-- Dentes -->
+                            <polygon points="150,280 165,310 180,280" fill="#fff"/>
+                            <polygon points="180,280 195,315 210,280" fill="#fff"/>
+                            <polygon points="210,280 225,320 240,280" fill="#fff"/>
+                            <polygon points="240,280 255,325 270,280" fill="#fff"/>
+                            <polygon points="270,280 285,320 300,280" fill="#fff"/>
+                            <polygon points="300,280 315,315 330,280" fill="#fff"/>
+                        </svg>
+
+                        <div class="absolute inset-0 flex flex-col items-center justify-center bg-red-950/40">
+                            <h1 class="text-5xl md:text-7xl font-black text-red-600 tracking-widest font-mono glitch-text uppercase mb-4" style="font-family: 'Creepster', cursive;">
+                                VOCÊ FOI DEMITIDO!
+                            </h1>
+                            <p class="text-yellow-400 font-mono text-lg bg-black/90 px-6 py-2 border-2 border-red-600 rounded">
+                                HUGGY WUGGY TE PEGOU NA ESCURIDÃO DA FÁBRICA
+                            </p>
+                            <button onclick="resetGameFromJumpscare()" class="mt-8 bg-red-600 hover:bg-red-700 text-white font-extrabold py-3 px-8 rounded-lg border-2 border-yellow-400 text-lg font-mono shadow-2xl transition">
+                                🔄 TENTAR NOVAMENTE
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Seleção de Mão / Controles -->
+            <div class="mt-4 flex flex-wrap justify-between items-center gap-4">
+                <div class="flex gap-3">
+                    <button onclick="setActiveHand('blue')" id="btn-hand-blue" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-lg border-2 border-blue-300 transition text-sm font-mono shadow-lg">
+                        🖐️ Mão Azul (Botão Esquerdo)
+                    </button>
+                    <button onclick="setActiveHand('red')" id="btn-hand-red" class="bg-zinc-800 hover:bg-red-700 text-white font-bold py-2 px-5 rounded-lg border-2 border-red-500 transition opacity-50 text-sm font-mono">
+                        🖐️ Mão Vermelha (Botão Direito)
+                    </button>
+                </div>
+                <div class="text-xs text-gray-400 font-mono">
+                    💡 <span class="text-yellow-400">Dica:</span> Alvos azuis usam a Mão Azul, alvos vermelhos a Mão Vermelha!
+                </div>
+            </div>
+        </section>
 
     </main>
 
-    <!-- Smooth Scrolling for Anchor Links -->
+    <footer class="bg-black text-center py-6 border-t border-zinc-800 text-xs text-gray-600 font-mono">
+        <p>© 1995 PLAYTIME CO. TODOS OS DIREITOS RESERVADOS.</p>
+        <p class="mt-1 text-red-900">Se você encontrou este manual... ELES JÁ SABEM ONDE VOCÊ ESTÁ.</p>
+    </footer>
+
+    <!-- LÓGICA E SINTETIZADOR NATIVO EM JAVASCRIPT (WEB AUDIO API) -->
     <script>
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
+        // --- SINTETIZADOR DE ÁUDIO NATIVO (WEB AUDIO API PURA) ---
+        let audioCtx = null;
+        let isAmbiencePlaying = false;
+        let ambienceOsc = null;
+        let ambienceGain = null;
+
+        function getAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        function toggleAmbience() {
+            const ctx = getAudioContext();
+            const btn = document.getElementById('btn-audio');
+
+            if (isAmbiencePlaying) {
+                if (ambienceOsc) {
+                    try { ambienceOsc.stop(); } catch(e){}
+                }
+                isAmbiencePlaying = false;
+                btn.innerText = "🎵 TRILHA SONORA: OFF";
+                btn.classList.remove("bg-yellow-500", "text-black");
+            } else {
+                isAmbiencePlaying = true;
+                btn.innerText = "🎵 TRILHA SONORA: ON";
+                btn.classList.add("bg-yellow-500", "text-black");
+                startAmbientSynth();
+            }
+        }
+
+        // Sintetizador Drone/Industrial de Terror
+        function startAmbientSynth() {
+            if (!isAmbiencePlaying) return;
+            const ctx = getAudioContext();
+
+            ambienceOsc = ctx.createOscillator();
+            const subOsc = ctx.createOscillator();
+            ambienceGain = ctx.createGain();
+
+            ambienceOsc.type = 'sawtooth';
+            ambienceOsc.frequency.setValueAtTime(55, ctx.currentTime); // Tom A1 grave
+
+            subOsc.type = 'sine';
+            subOsc.frequency.setValueAtTime(27.5, ctx.currentTime); // Sub-bass
+
+            // LFO para oscilação sombria de volume
+            const lfo = ctx.createOscillator();
+            const lfoGain = ctx.createGain();
+            lfo.frequency.setValueAtTime(0.2, ctx.currentTime);
+            lfoGain.gain.setValueAtTime(0.05, ctx.currentTime);
+
+            lfo.connect(lfoGain);
+            lfoGain.connect(ambienceGain.gain);
+
+            ambienceGain.gain.setValueAtTime(0.08, ctx.currentTime);
+
+            ambienceOsc.connect(ambienceGain);
+            subOsc.connect(ambienceGain);
+            ambienceGain.connect(ctx.destination);
+
+            ambienceOsc.start();
+            subOsc.start();
+            lfo.start();
+        }
+
+        function playSoundEffect(type) {
+            const ctx = getAudioContext();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, ctx.currentTime);
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.05);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.05);
+            } else if (type === 'shoot_blue') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(300, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, ctx.currentTime + 0.15);
+                gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.15);
+            } else if (type === 'shoot_red') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(500, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.2);
+            } else if (type === 'alarm') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(900, ctx.currentTime);
+                osc.frequency.linearRampToValueAtTime(400, ctx.currentTime + 0.4);
+                gain.gain.setValueAtTime(0.25, ctx.currentTime);
+                gain.gain.linearRampToValueAtTime(0.01, ctx.currentTime + 0.4);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.4);
+            } else if (type === 'jumpscare') {
+                // Som Sintético de Impacto/Grito de Terror
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(120, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.8);
+                gain.gain.setValueAtTime(0.5, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.8);
+            }
+        }
+
+        function toggleEmergencyAlarm() {
+            playSoundEffect('alarm');
+            triggerGlitchEffect();
+        }
+
+        function playTape(type) {
+            playSoundEffect(type === 'blue' ? 'shoot_blue' : 'shoot_red');
+            alert(type === 'blue' ? 
+                "📼 [FITA AZUL]: 'Para operar o GrabPack, dispare as mãos condutoras em painéis elétricos para transferir energia entre os conectores.'" : 
+                "📼 [FITA VERMELHA]: 'ATENÇÃO: Em caso de falha de contenção dos corpos maiores, evacue o setor imediatamente.'"
+            );
+        }
+
+        // --- GERADOR DE CRACHÁ DINÂMICO ---
+        function updateBadge() {
+            const nameInput = document.getElementById('badge-name-input').value;
+            const roleInput = document.getElementById('badge-role-input').value;
+            
+            document.getElementById('badge-name').innerText = nameInput.trim() !== "" ? nameInput : "SEU NOME";
+            document.getElementById('badge-role').innerText = roleInput;
+        }
+
+        // --- MODOS DE LANTERNA (ILUMINAÇÃO) ---
+        let flashlightMode = 0; // 0: Foco, 1: Luz Total, 2: Escuridão
+        const flashlightOverlay = document.getElementById('flashlight-overlay');
+
+        function cycleFlashlightMode() {
+            flashlightMode = (flashlightMode + 1) % 3;
+            const btn = document.getElementById('btn-flashlight');
+            
+            if (flashlightMode === 0) {
+                btn.innerText = "🔦 LANTERNA: FOCO";
+                flashlightOverlay.style.background = "radial-gradient(circle 250px at var(--mouse-x, 50%) var(--mouse-y, 50%), transparent 0%, rgba(0,0,0,0.85) 100%)";
+            } else if (flashlightMode === 1) {
+                btn.innerText = "💡 LUZES: ACESAS";
+                flashlightOverlay.style.background = "none";
+            } else {
+                btn.innerText = "🌑 ESCURIDÃO TOTAL";
+                flashlightOverlay.style.background = "rgba(0,0,0,0.7)";
+            }
+            playSoundEffect('click');
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            if (flashlightMode === 0) {
+                flashlightOverlay.style.setProperty('--mouse-x', e.clientX + 'px');
+                flashlightOverlay.style.setProperty('--mouse-y', e.clientY + 'px');
+            }
+        });
+        // Inicializar Lanterna
+        cycleFlashlightMode();
+
+        // --- EFEITO VISUAL VHS GLITCH ---
+        function triggerGlitchEffect() {
+            playSoundEffect('click');
+            document.body.style.filter = "invert(1) hue-rotate(180deg)";
+            setTimeout(() => {
+                document.body.style.filter = "none";
+            }, 200);
+        }
+
+        // --- CÂMERAS CFTV EM CANVAS ---
+        const cftvCanvas = document.getElementById('cftvCanvas');
+        const cftvCtx = cftvCanvas.getContext('2d');
+        let currentCam = 1;
+
+        function resizeCftv() {
+            cftvCanvas.width = cftvCanvas.parentElement.clientWidth;
+            cftvCanvas.height = cftvCanvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resizeCftv);
+        resizeCftv();
+
+        function switchCamera(camNum) {
+            currentCam = camNum;
+            playSoundEffect('click');
+
+            // Atualizar botões
+            for (let i = 1; i <= 3; i++) {
+                const btn = document.getElementById(`btn-cam-${i}`);
+                if (i === camNum) {
+                    btn.className = "w-full bg-zinc-800 hover:bg-zinc-700 text-yellow-400 p-2 rounded text-xs font-mono border-l-4 border-yellow-500 text-left";
+                } else {
+                    btn.className = "w-full bg-zinc-900 hover:bg-zinc-700 text-gray-400 p-2 rounded text-xs font-mono border-l-4 border-transparent text-left";
+                }
+            }
+
+            const titles = {
+                1: "CAM 01 - SAGUÃO PRINCIPAL",
+                2: "CAM 02 - DUTOS DE VENTILAÇÃO",
+                3: "CAM 03 - SALA DA BONECA POPPY"
+            };
+            document.getElementById('cam-title').innerText = titles[camNum];
+        }
+
+        function renderCftv() {
+            cftvCtx.fillStyle = '#050505';
+            cftvCtx.fillRect(0, 0, cftvCanvas.width, cftvCanvas.height);
+
+            // Desenhar Cenas Simples no Canvas
+            if (currentCam === 1) {
+                // Saguão Principal: Pedestal do Huggy Wuggy
+                cftvCtx.fillStyle = '#1e293b';
+                cftvCtx.fillRect(cftvCanvas.width / 2 - 40, cftvCanvas.height - 60, 80, 40);
+                cftvCtx.fillStyle = '#334155';
+                cftvCtx.fillText("PEDESTAL VAZIO", cftvCanvas.width / 2 - 40, cftvCanvas.height - 70);
+            } else if (currentCam === 2) {
+                // Dutos de Ventilação
+                cftvCtx.strokeStyle = '#334155';
+                cftvCtx.lineWidth = 4;
+                cftvCtx.strokeRect(30, 30, cftvCanvas.width - 60, cftvCanvas.height - 60);
+                // Olhos vermelhos no duto
+                cftvCtx.fillStyle = '#ef4444';
+                cftvCtx.beginPath();
+                cftvCtx.arc(cftvCanvas.width / 2 - 15, cftvCanvas.height / 2, 4, 0, Math.PI * 2);
+                cftvCtx.arc(cftvCanvas.width / 2 + 15, cftvCanvas.height / 2, 4, 0, Math.PI * 2);
+                cftvCtx.fill();
+            } else {
+                // Sala da Poppy
+                cftvCtx.strokeStyle = '#dc2626';
+                cftvCtx.strokeRect(cftvCanvas.width / 2 - 30, cftvCanvas.height / 2 - 40, 60, 80);
+                cftvCtx.fillStyle = '#facc15';
+                cftvCtx.font = "10px font-mono";
+                cftvCtx.fillText("CAIXA DE VIDRO", cftvCanvas.width / 2 - 35, cftvCanvas.height / 2 + 55);
+            }
+
+            // Efeito de Estática de TV (Ruído Randon)
+            const imgData = cftvCtx.getImageData(0, 0, cftvCanvas.width, cftvCanvas.height);
+            for (let i = 0; i < imgData.data.length; i += 4) {
+                if (Math.random() < 0.2) {
+                    const noise = Math.random() * 255;
+                    imgData.data[i] = noise;
+                    imgData.data[i+1] = noise;
+                    imgData.data[i+2] = noise;
+                }
+            }
+            cftvCtx.putImageData(imgData, 0, 0);
+
+            requestAnimationFrame(renderCftv);
+        }
+        renderCftv();
+
+        // --- LÓGICA DO MINI JOGO DO GRABPACK ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        let gameActive = false;
+        let activeHand = 'blue';
+        let score = 0;
+        const targetScore = 10;
+        let timeLeft = 20;
+        let timerInterval = null;
+        let targets = [];
+        let grabRopes = [];
+
+        function resizeCanvas() {
+            canvas.width = canvas.parentElement.clientWidth;
+            canvas.height = canvas.parentElement.clientHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function setActiveHand(hand) {
+            activeHand = hand;
+            const btnBlue = document.getElementById('btn-hand-blue');
+            const btnRed = document.getElementById('btn-hand-red');
+
+            if (hand === 'blue') {
+                btnBlue.classList.remove('opacity-50', 'bg-zinc-800');
+                btnBlue.classList.add('bg-blue-600');
+                btnRed.classList.add('opacity-50', 'bg-zinc-800');
+                btnRed.classList.remove('bg-red-600');
+            } else {
+                btnRed.classList.remove('opacity-50', 'bg-zinc-800');
+                btnRed.classList.add('bg-red-600');
+                btnBlue.classList.add('opacity-50', 'bg-zinc-800');
+                btnBlue.classList.remove('bg-blue-600');
+            }
+            playSoundEffect('click');
+        }
+
+        function startGame() {
+            resizeCanvas();
+            gameActive = true;
+            score = 0;
+            timeLeft = 20;
+            targets = [];
+            grabRopes = [];
+
+            document.getElementById('game-overlay').classList.add('hidden');
+            document.getElementById('jumpscare-overlay').classList.add('hidden');
+            document.getElementById('game-status').innerText = "Status: CAPTURE OS BRINQUEDOS!";
+            document.getElementById('game-score').innerText = `Pontos: ${score} / ${targetScore}`;
+            document.getElementById('game-timer').innerText = `Tempo: ${timeLeft}s`;
+
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('game-timer').innerText = `Tempo: ${timeLeft}s`;
+
+                if (timeLeft <= 0) {
+                    if (score >= targetScore) {
+                        endGame(true);
+                    } else {
+                        triggerJumpscare();
+                    }
+                }
+            }, 1000);
+
+            spawnTargets();
+            requestAnimationFrame(gameLoop);
+        }
+
+        function spawnTargets() {
+            if (!gameActive) return;
+
+            if (targets.length < 5) {
+                const types = ['blue_toy', 'red_toy', 'huggy_monster'];
+                const randType = types[Math.floor(Math.random() * types.length)];
+                
+                targets.push({
+                    x: Math.random() * (canvas.width - 80) + 40,
+                    y: Math.random() * (canvas.height - 120) + 40,
+                    vx: (Math.random() - 0.5) * 3,
+                    vy: (Math.random() - 0.5) * 3,
+                    radius: 26,
+                    type: randType
+                });
+            }
+
+            setTimeout(spawnTargets, 800);
+        }
+
+        function gameLoop() {
+            if (!gameActive) return;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Fundo
+            ctx.fillStyle = "#09090d";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Alvos
+            targets.forEach((target) => {
+                target.x += target.vx;
+                target.y += target.vy;
+
+                if (target.x < target.radius || target.x > canvas.width - target.radius) target.vx *= -1;
+                if (target.y < target.radius || target.y > canvas.height - target.radius) target.vy *= -1;
+
+                ctx.beginPath();
+                ctx.arc(target.x, target.y, target.radius, 0, Math.PI * 2);
+
+                if (target.type === 'blue_toy') {
+                    ctx.fillStyle = '#2563eb';
+                    ctx.fill();
+                    ctx.strokeStyle = '#60a5fa';
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = "bold 11px 'Share Tech Mono'";
+                    ctx.textAlign = 'center';
+                    ctx.fillText('🧸 AZUL', target.x, target.y + 4);
+                } else if (target.type === 'red_toy') {
+                    ctx.fillStyle = '#dc2626';
+                    ctx.fill();
+                    ctx.strokeStyle = '#f87171';
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = "bold 11px 'Share Tech Mono'";
+                    ctx.textAlign = 'center';
+                    ctx.fillText('🤖 VERM.', target.x, target.y + 4);
+                } else {
+                    ctx.fillStyle = '#0f172a';
+                    ctx.fill();
+                    ctx.strokeStyle = '#ef4444';
+                    ctx.lineWidth = 4;
+                    ctx.stroke();
+                    ctx.fillStyle = '#ef4444';
+                    ctx.font = "bold 12px 'Share Tech Mono'";
+                    ctx.textAlign = 'center';
+                    ctx.fillText('⚠️ HUGGY', target.x, target.y + 4);
+                }
+            });
+
+            // Cordas GrabPack
+            grabRopes.forEach((rope, index) => {
+                ctx.beginPath();
+                ctx.moveTo(rope.startX, rope.startY);
+                ctx.lineTo(rope.targetX, rope.targetY);
+                ctx.strokeStyle = rope.hand === 'blue' ? '#3b82f6' : '#ef4444';
+                ctx.lineWidth = 6;
+                ctx.stroke();
+
+                rope.life -= 0.1;
+                if (rope.life <= 0) grabRopes.splice(index, 1);
+            });
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        canvas.addEventListener('mousedown', (e) => {
+            if (!gameActive) return;
+
+            const rect = canvas.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const clickY = e.clientY - rect.top;
+
+            let currentShootHand = activeHand;
+            if (e.button === 2) currentShootHand = 'red';
+            else if (e.button === 0) currentShootHand = 'blue';
+
+            playSoundEffect(currentShootHand === 'blue' ? 'shoot_blue' : 'shoot_red');
+
+            const startX = currentShootHand === 'blue' ? 40 : canvas.width - 40;
+            grabRopes.push({
+                startX: startX,
+                startY: canvas.height,
+                targetX: clickX,
+                targetY: clickY,
+                hand: currentShootHand,
+                life: 1.0
+            });
+
+            targets.forEach((target, index) => {
+                const dist = Math.hypot(target.x - clickX, target.y - clickY);
+                if (dist < target.radius + 15) {
+                    if (target.type === 'huggy_monster') {
+                        triggerJumpscare();
+                    } else if ((target.type === 'blue_toy' && currentShootHand === 'blue') ||
+                               (target.type === 'red_toy' && currentShootHand === 'red')) {
+                        score++;
+                        targets.splice(index, 1);
+                        document.getElementById('game-score').innerText = `Pontos: ${score} / ${targetScore}`;
+
+                        if (score >= targetScore) {
+                            endGame(true);
+                        }
+                    } else {
+                        triggerGlitchEffect();
+                        timeLeft -= 2;
+                    }
                 }
             });
         });
+
+        canvas.addEventListener('contextmenu', e => e.preventDefault());
+
+        function triggerJumpscare() {
+            gameActive = false;
+            clearInterval(timerInterval);
+            playSoundEffect('jumpscare');
+
+            document.getElementById('jumpscare-overlay').classList.remove('hidden');
+            document.body.classList.add('jumpscare-shake');
+            setTimeout(() => {
+                document.body.classList.remove('jumpscare-shake');
+            }, 1500);
+        }
+
+        function resetGameFromJumpscare() {
+            document.getElementById('jumpscare-overlay').classList.add('hidden');
+            startGame();
+        }
+
+        function endGame(won) {
+            gameActive = false;
+            clearInterval(timerInterval);
+            const overlay = document.getElementById('game-overlay');
+            const title = document.getElementById('overlay-title');
+            const desc = document.getElementById('overlay-desc');
+
+            overlay.classList.remove('hidden');
+
+            if (won) {
+                playSoundEffect('click');
+                title.innerText = "⚡ TESTE APROVADO!";
+                title.className = "text-3xl font-bold text-green-400 mb-2 font-mono";
+                desc.innerText = "Parabéns! Você demonstrou maestria no uso do GrabPack e provou estar pronto para o turno noturno na Playtime Co.";
+            }
+        }
     </script>
 </body>
 </html>
